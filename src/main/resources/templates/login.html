@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="theme-color" content="#000000">
+  <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+  <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+  <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+  <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+  <title>React App</title>
+  <script src="/platform.js?onload=init" async defer></script>
+  <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase-auth.js"></script>
+  <script>
+    var config = {
+      apiKey: "AIzaSyApLV_ZpSBOerlXE0kjc2dSj5ywZr0Y1V0",
+      authDomain: "workflow-engine-5a4ef.firebaseapp.com",
+      databaseURL: "https://workflow-engine-5a4ef.firebaseio.com",
+      projectId: "workflow-engine-5a4ef",
+      storageBucket: "",
+      messagingSenderId: "84477132810"
+    };
+    firebase.initializeApp(config);
+  </script>
+  <script>
+
+    function signinChanged(sign)
+    {
+      console.log(sign);
+      // var sign = gapi.auth2.getAuthResponse().isSignedIn.get();
+      if(sign){
+        login();
+      }
+    }
+
+    function login(){
+
+      var provider = new firebase.auth.GoogleAuthProvider();
+        var user = gapi.auth2.getAuthInstance().currentUser.get();
+
+        var idToken = user.getAuthResponse().id_token;
+        var accessToken = user.getAuthResponse().access_token;
+        var credentials = firebase.auth.GoogleAuthProvider.credential(idToken, accessToken);
+
+        firebase.auth().signInAndRetrieveDataWithCredential(credentials).then(function (result) {
+          // This gives you a Google Access Token. You can use it to access the Google API.
+          var token = result.credential.accessToken;
+          // The signed-in user info.
+
+          console.log(result.user);
+          // ...
+        }).catch(function (error) {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+          // ...
+        });
+
+    }
+    function onInit(data1, data2) {
+
+
+      var sign = data1.isSignedIn.get();
+      data1.isSignedIn.listen(signinChanged);
+
+      if (!sign) {
+        data1.signIn();
+      } else {
+        login();
+      }
+    }
+
+
+    function onError(error) {
+      console.log('Error');
+      console.log(error);
+    }
+
+    function init() {
+      gapi.load('auth2', function () { // Ready.
+        console.log('OK');
+        gapi.auth2.init({
+          client_id: '733529316667-1qqss79maff4ajocoe85kd47efaajf51.apps.googleusercontent.com'
+          // client_id: '84477132810-4773kmn3ob1ue7q4r332pivckke81dut.apps.googleusercontent.com'
+        }).then(onInit, onError)
+        ;
+      });
+    }
+  </script>
+</head>
+
+<body>
+  <noscript>
+    You need to enable JavaScript to run this app.
+  </noscript>
+  <div id="root"></div>
+</body>
+</html>

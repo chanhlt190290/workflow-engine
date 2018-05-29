@@ -21,7 +21,9 @@ import javax.persistence.Table;
 @Table(name = "state")
 public class State implements Serializable {
 
-    /**
+    private static final long serialVersionUID = 8644933097540474847L;
+
+	/**
      * @return the type
      */
     public Integer getType() {

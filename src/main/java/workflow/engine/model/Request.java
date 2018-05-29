@@ -22,7 +22,10 @@ import javax.validation.constraints.NotNull;
 @Table(name = "request")
 public class Request implements Serializable {
 
-    /**
+    
+    private static final long serialVersionUID = 2303329690517682228L;
+
+	/**
      * @return the username
      */
     public String getUsername() {
