@@ -8,15 +8,11 @@ package workflow.engine.model;
 import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -25,6 +21,21 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 @Table(name = "request")
 public class Request implements Serializable {
+
+    /**
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
+    }
+
+    /**
+     * @param username the username to set
+     */
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
 
     /**
      * @return the process
@@ -68,40 +79,31 @@ public class Request implements Serializable {
         this.user = user;
     }
 
-    /**
-     * @return the state
-     */
-    public State getState() {
-        return state;
-    }
-
-    /**
-     * @param state the state to set
-     */
-    public void setState(State state) {
-        this.state = state;
-    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
     @Column(name = "process_id")
+    @NotNull
     private Integer process;
 
     @Column(name = "title")
+    @NotNull
     private String title;
 
     @Column(name = "user_id")
+    @NotNull
     private Integer user;
-
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "current_state_id", nullable = false)
-    @OnDelete(action = OnDeleteAction.CASCADE)
-    private State state;
     
+    @Column(name = "username")
+    @NotNull
+    private String username;
     
-
+    @Column(name = "current_state_id")
+    @NotNull
+    private Integer state;
+    
     /**
      * @return the id
      */
@@ -114,6 +116,20 @@ public class Request implements Serializable {
      */
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    /**
+     * @return the state
+     */
+    public Integer getState() {
+        return state;
+    }
+
+    /**
+     * @param stateId the state to set
+     */
+    public void setState(Integer stateId) {
+        this.state = stateId;
     }
 
 }

@@ -4,28 +4,32 @@
     
     <resultMap id="BaseResultMap" type="Request">
         <id column="id" jdbcType="BIGINT" property="id" />
-        <result column="process" jdbcType="BIT" property="process_id" />
-        <result column="user" jdbcType="VARCHAR" property="user_id" />
-        <result column="state" jdbcType="VARCHAR" property="current_state_id" />
+        <result column="state" jdbcType="VARCHAR" property="state" />
         <result column="title" jdbcType="VARCHAR" property="title" />
     </resultMap>
     
     <sql id="Base_Column_List">
-        id, process_id, title, user_id, current_state_id
+        r.id, r.title, s.name as state
     </sql>
     
     <sql id="Table_Name">
-        request
+        request r join state s on s.id = r.current_state_id 
     </sql>
     
     <sql id="Primary_Key">
-        id
+        r.id
     </sql>
     
     <select id="getRequest" resultMap="BaseResultMap">
         select <include refid="Base_Column_List" /> 
         from <include refid="Table_Name" /> 
         where <include refid="Primary_Key" /> = #{id}
+    </select>
+    
+    <select id="getRequests" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List" /> 
+        from <include refid="Table_Name" /> 
+        where <include refid="Primary_Key" />
     </select>
     
 </mapper>

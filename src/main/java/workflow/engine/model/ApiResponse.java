@@ -26,6 +26,10 @@ public class ApiResponse {
         this.code = HttpStatus.OK.value();
         this.data = data;
     }
+    
+    public ApiResponse() {
+        this.code = HttpStatus.OK.value();
+    }
 
     /**
      * @return the code

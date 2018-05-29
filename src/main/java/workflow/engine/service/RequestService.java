@@ -5,12 +5,14 @@
  */
 package workflow.engine.service;
 
-import workflow.engine.model.Request;
+import java.util.List;
+import workflow.engine.model.Request01;
 
 /**
  *
  * @author trungchanh
  */
 public interface RequestService {
-    Request getRequest(int id);
+    Request01 getRequest(int id);
+    List<Request01> getRequests();
 }
