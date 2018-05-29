@@ -1,4 +1,4 @@
-package hello.model;
+package workflow.engine.model;
 
 import org.springframework.http.HttpStatus;
 
@@ -12,6 +12,18 @@ public class ApiResponse {
 
         this.code = code.value();
         this.message = message;
+        this.data = data;
+    }
+    
+    public ApiResponse(HttpStatus code, String message) {
+
+        this.code = code.value();
+        this.message = message;
+    }
+    
+    public ApiResponse(Object data) {
+
+        this.code = HttpStatus.OK.value();
         this.data = data;
     }
 

@@ -1,4 +1,4 @@
-package hello.controller;
+package workflow.engine.controller;
 
 import java.util.List;
 
@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import hello.model.Action;
-import hello.model.ApiResponse;
-import hello.repository.ActionRepository;
+import workflow.engine.model.Action;
+import workflow.engine.model.ApiResponse;
+import workflow.engine.repository.ActionRepository;
 
 @RestController
 @RequestMapping("/api")
@@ -24,7 +24,7 @@ public class ActionController {
     public ResponseEntity<ApiResponse> getAll() {
         List<Action> actions = actionRepository.findAll();
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, null, actions);
-        return new ResponseEntity<ApiResponse>(apiResponse, HttpStatus.OK);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
 }
