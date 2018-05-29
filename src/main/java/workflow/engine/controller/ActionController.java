@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import workflow.engine.model.Action;
 import workflow.engine.model.ApiResponse;
-import workflow.engine.repository.ActionRepository;
+import workflow.engine.service.ActionService;
 
 @RestController
 @RequestMapping("/api")
 public class ActionController {
 
     @Autowired
-    private ActionRepository actionRepository;
+    ActionService actionService;
 
     @GetMapping("/actions")
     public ResponseEntity<ApiResponse> getAll() {
-        List<Action> actions = actionRepository.findAll();
+        List<Action> actions = actionService.getAll();
         ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, null, actions);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }

@@ -7,8 +7,6 @@ package workflow.engine.controller;
 
 import java.util.List;
 import javax.validation.Valid;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import workflow.engine.model.ApiResponse;
 import workflow.engine.model.Request;
 import workflow.engine.model.Request01;
-import workflow.engine.repository.RequestRepository;
 import workflow.engine.service.RequestService;
 
 /**
@@ -32,20 +29,14 @@ import workflow.engine.service.RequestService;
 @RequestMapping("/api")
 public class RequestController {
 
-    @Autowired
-    private RequestRepository requestRepository;
 
     @Autowired
     private RequestService requestService;
-    
-    @Autowired
-    private SessionFactory sessionFactory;
 
-  
 
     @GetMapping("/requests")
     public ResponseEntity<ApiResponse> getAll() {
-//        List<Request> requests = requestRepository.findAll();
+    //    List<Request> requests = requestRepository.findAll();
         List<Request01> requests = requestService.getRequests();
         ApiResponse apiResponse = new ApiResponse(requests);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
@@ -53,15 +44,12 @@ public class RequestController {
 
     @PostMapping(value = "/requests", produces = "application/json", consumes = "application/json")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody Request request) {
-        Transaction tranx = sessionFactory.getCurrentSession().beginTransaction();
-        try {
-            request = requestRepository.save(request);
-            tranx.commit();
+       
+            // request = requestRepository.save(request);
+            
             ApiResponse apiResponse = new ApiResponse(request);
             return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-        } finally {
-            tranx.rollback();
-        }
+      
     }
 
     @GetMapping("/requests/{id}")
@@ -71,10 +59,10 @@ public class RequestController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @PostMapping("/requests/{id}/approve")
-    public ResponseEntity<ApiResponse> approve(@PathVariable int id) {
-        List<Request> requests = requestRepository.findAll();
-        ApiResponse apiResponse = new ApiResponse(requests);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-    }
+    // @PostMapping("/requests/{id}/approve")
+    // public ResponseEntity<ApiResponse> approve(@PathVariable int id) {
+    //     List<Request> requests = requestRepository.findAll();
+    //     ApiResponse apiResponse = new ApiResponse(requests);
+    //     return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    // }
 }
