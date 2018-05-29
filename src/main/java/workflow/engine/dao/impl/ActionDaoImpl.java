@@ -15,20 +15,22 @@ import workflow.engine.dao.ActionDao;
 import workflow.engine.model.Action;
 
 @Repository
-public class ActionDaoImpl implements ActionDao{
+public class ActionDaoImpl implements ActionDao {
 
-    @Override
-    @SuppressWarnings("unchecked")
-	public List<Action> getAll() {
-		return this.sessionFactory.getCurrentSession().createQuery("from Action").list();
-    }
-    
     final static Logger logger = LoggerFactory.getLogger(ActionDaoImpl.class);
     private SessionFactory sessionFactory;
-    @Autowired 
+
+    @Autowired
     public ActionDaoImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
     }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<Action> getAll() {
+        return this.sessionFactory.getCurrentSession().createQuery("from Action").list();
+    }
+
     @Override
     public Action findById(int id) {
         Session session = this.sessionFactory.getCurrentSession();

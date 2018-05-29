@@ -19,38 +19,39 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @PropertySource("classpath:application.properties")
 public class MySQLAppConfig {
-    @Value("${spring.datasource.driverClassName}") String driverClassName;
-    @Value("${spring.datasource.url}") String url;
-    @Value("${spring.datasource.username}") String username;
-    @Value("${spring.datasource.password}") String password;
+    @Value("${spring.datasource.driverClassName}")
+    String driverClassName;
+    @Value("${spring.datasource.url}")
+    String url;
+    @Value("${spring.datasource.username}")
+    String username;
+    @Value("${spring.datasource.password}")
+    String password;
+
     @Bean(name = "dataSource")
     public DataSource getDataSource() {
-        DataSource dataSource = DataSourceBuilder
-                .create()
-                .username(username)
-                .password(password)
-                .url(url)
-                .driverClassName(driverClassName)
-                .build();
+        DataSource dataSource = DataSourceBuilder.create().username(username).password(password).url(url)
+                .driverClassName(driverClassName).build();
         return dataSource;
     }
+
     @Bean(name = "sessionFactory")
     public SessionFactory getSessionFactory(DataSource dataSource) {
         LocalSessionFactoryBuilder sessionBuilder = new LocalSessionFactoryBuilder(dataSource);
         sessionBuilder.scanPackages("workflow.engine.model");
         return sessionBuilder.buildSessionFactory();
     }
+
     @Bean(name = "transactionManager")
-    public HibernateTransactionManager getTransactionManager(
-            SessionFactory sessionFactory) {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager(
-                sessionFactory);
+    public HibernateTransactionManager getTransactionManager(SessionFactory sessionFactory) {
+        HibernateTransactionManager transactionManager = new HibernateTransactionManager(sessionFactory);
         return transactionManager;
-    }   
+    }
+
     @Bean
     public DataSourceInitializer dataSourceInitializer(final DataSource dataSource) {
         final DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
         return initializer;
-    }    
+    }
 }
