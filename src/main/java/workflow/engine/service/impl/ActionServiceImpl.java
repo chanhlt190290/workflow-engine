@@ -30,30 +30,12 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public Action findById(int id) {
-        TypedQuery<Action> query = em.createQuery("from Action where id = ?1", Action.class);
-        query.setParameter(1, id);
-        return query.getSingleResult();
+        return em.find(Action.class, id);
     }
-////
-////    @Override
-////	public List<Request01> getRequests() {
-////		return requestService.getRequests();
-////	}
-
-//    @Override
-//    public List<Action> getAll() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
-//
-//    @Override
-//    public Action findById(int id) {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-//    }
 
     @Override
     public Action create(Action action) {
         em.persist(action);
-        em.flush();
         return action;
     }
 

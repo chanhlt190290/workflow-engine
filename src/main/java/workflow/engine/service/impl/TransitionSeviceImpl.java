@@ -31,9 +31,8 @@ public class TransitionSeviceImpl implements TransitionService {
     private EntityManager em;
 
     @Override
-    public List<Transition> findByCurrentStateId(State state) {
-        System.out.println("stateId = " + state.getId());
-        TypedQuery query = em.createQuery("select t from Transition t where t.currentState = ?1", Transition.class);
+    public List<Transition> findByState(State state) {
+        TypedQuery<Transition> query = em.createQuery("select t from Transition t where t.currentState = ?1", Transition.class);
         query.setParameter(1, state);
         List<Transition> transitions = query.getResultList();
         return transitions;
@@ -41,7 +40,7 @@ public class TransitionSeviceImpl implements TransitionService {
 
     @Override
     public void loadTransitions(Request req) {
-        List<Transition> transitions = findByCurrentStateId(req.getState());
+        List<Transition> transitions = findByState(req.getState());
         for (Transition transition : transitions) {
             Set<Action> actions = transition.getActions();
             for (Action action : actions) {
@@ -50,14 +49,13 @@ public class TransitionSeviceImpl implements TransitionService {
                 reqAction.setRequest(req);
                 reqAction.setTransition(transition);
                 em.persist(reqAction);
-                em.flush();
             }
         }
     }
 
     @Override
     public void disableTransitions(Request req) {
-        List<Transition> transitions = findByCurrentStateId(req.getState());
+        List<Transition> transitions = findByState(req.getState());
         for (Transition transition : transitions) {
             Set<Action> actions = transition.getActions();
             for (Action action : actions) {
@@ -72,7 +70,6 @@ public class TransitionSeviceImpl implements TransitionService {
                 if (!ras.isEmpty()) {
                     for (RequestAction ra : ras) {
                         ra.setIsActive(Boolean.FALSE);
-                        em.merge(ra);
                         em.flush();
                     }
                 }

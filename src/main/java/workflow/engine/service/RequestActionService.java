@@ -15,10 +15,6 @@ public interface RequestActionService {
 
     public RequestAction getRequestAction(int id);
 
-    public RequestAction update(RequestAction requestAction);
-    
-    public boolean checkTransitionComplete(int requestId, int transitionId);
-
     public RequestAction performAction(int id);
     
 }

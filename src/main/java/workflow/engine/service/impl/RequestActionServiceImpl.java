@@ -34,33 +34,12 @@ public class RequestActionServiceImpl implements RequestActionService {
 
     @Override
     public RequestAction getRequestAction(int id) {
-        TypedQuery<RequestAction> query = em.createQuery("select r from RequestAction r where r.id = ?1", RequestAction.class);
-        query.setParameter(1, id);
-        return query.getSingleResult();
-    }
-
-    @Override
-    public RequestAction update(RequestAction requestAction) {
-        em.persist(requestAction);
-        em.flush();
-        return requestAction;
-    }
-
-    @Override
-    public boolean checkTransitionComplete(int requestId, int transitionId) {
-        TypedQuery query = em.createQuery("select count(ra) from RequestAction ra where ra.request = ?1 and ra.transition = ?2 and ra.isActive = true and ra.isComplete = false", Integer.class);
-        query.setParameter(1, requestId);
-        query.setParameter(2, transitionId);
-        Integer count = query.getFirstResult();
-        return count == 0;
+        return em.find(RequestAction.class, id);
     }
 
     @Override
     public RequestAction performAction(int id) {
-        TypedQuery<RequestAction> query = em.createQuery("select r from RequestAction r where r.id = ?1", RequestAction.class);
-        query.setParameter(1, id);
-        RequestAction requestAction = query.getSingleResult();
-
+        RequestAction requestAction = getRequestAction(id);
         if (requestAction.getIsComplete() || requestAction.getIsActive() == false) {
             return requestAction;
         }
@@ -70,7 +49,7 @@ public class RequestActionServiceImpl implements RequestActionService {
         em.persist(requestAction);
         em.flush();
 
-        List<RequestAction> requestActions = findByTransitionId(requestAction.getTransition(), requestAction.getRequest());
+        List<RequestAction> requestActions = findByTransition(requestAction.getTransition(), requestAction.getRequest());
 
         boolean isComplete = true;
         for (RequestAction ra : requestActions) {
@@ -85,14 +64,13 @@ public class RequestActionServiceImpl implements RequestActionService {
             Transition transition = requestAction.getTransition();
             request.setState(transition.getNextState());
             em.persist(request);
-            em.flush();
             transitionService.loadTransitions(request);
         }
         return requestAction;
     }
 
-    private List<RequestAction> findByTransitionId(Transition transition, Request request) {
-        TypedQuery query = em.createQuery("select ra from RequestAction ra where ra.transition = ?1 and ra.request = ?2 and ra.isActive = true and ra.isComplete = false", RequestAction.class);
+    private List<RequestAction> findByTransition(Transition transition, Request request) {
+        TypedQuery<RequestAction> query = em.createQuery("select ra from RequestAction ra where ra.transition = ?1 and ra.request = ?2 and ra.isActive = true and ra.isComplete = false", RequestAction.class);
         query.setParameter(1, transition);
         query.setParameter(2, request);
         List<RequestAction> ras = query.getResultList();

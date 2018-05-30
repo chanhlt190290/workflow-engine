@@ -15,11 +15,7 @@ public interface RequestService {
 
     Request create(Request req);
 
-    Request approve(Request req);
-
     Request getById(int id);
-
-    public void transit(Integer request, Integer transition);
 
     public Request create(Request request, Integer stateId);
 }

@@ -34,26 +34,14 @@ public class RequestServiceImpl implements RequestService {
     public Request create(Request req) {
         em.persist(req);
         transitionService.loadTransitions(req);
-        em.flush();
         return req;
     }
 
     @Override
     public Request getById(int id) {
-        TypedQuery<Request> query = em.createQuery("select r from Request r where r.id = ?1", Request.class);
-        query.setParameter(1, id);
-        return query.getSingleResult();
+        return em.find(Request.class, id);
     }
 
-    @Override
-    public Request approve(Request req) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public void transit(Integer request, Integer transition) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     @Override
     public Request create(Request req, Integer stateId) {
@@ -62,7 +50,6 @@ public class RequestServiceImpl implements RequestService {
         req.setState(state);
         em.persist(req);
         transitionService.loadTransitions(req);
-        em.flush();
         return req;
     }
 }

@@ -16,8 +16,9 @@ import workflow.engine.model.Transition;
  */
 public interface TransitionService {
 
-    public List<Transition> findByCurrentStateId(State state);
+    public List<Transition> findByState(State state);
     
     public void loadTransitions(Request req);
+
     public void disableTransitions(Request req);
 }
