@@ -1,12 +1,19 @@
 package workflow.engine.model;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -43,6 +50,16 @@ public class Action implements Serializable {
 
     @Column(name = "description")
     private String description;
+    
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.MERGE
+            })
+    @JoinTable(name = "transition_action",
+            joinColumns = { @JoinColumn(name = "transition_id") },
+            inverseJoinColumns = { @JoinColumn(name = "action_id") })
+    private Set<Transition> transitions = new HashSet<>();
 
 
     public Integer getId(){
@@ -83,5 +100,19 @@ public class Action implements Serializable {
 
     public void setDescription(String description){
         this.description =  description;
+    }
+
+    /**
+     * @return the transitions
+     */
+    public Set<Transition> getTransitions() {
+        return transitions;
+    }
+
+    /**
+     * @param transitions the transitions to set
+     */
+    public void setTransitions(Set<Transition> transitions) {
+        this.transitions = transitions;
     }
 }

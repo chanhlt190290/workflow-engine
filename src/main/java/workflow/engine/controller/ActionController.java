@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import workflow.engine.model.Action;
 import workflow.engine.model.ApiResponse;
 import workflow.engine.service.ActionService;
 
@@ -20,11 +19,11 @@ public class ActionController {
     @Autowired
     ActionService actionService;
 
-    @GetMapping("/actions")
-    public ResponseEntity<ApiResponse> getAll() {
-        List<Action> actions = actionService.getAll();
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, null, actions);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-    }
+//    @GetMapping("/actions")
+//    public ResponseEntity<ApiResponse> getAll() {
+//        List<Action> actions = actionService.getAll();
+//        ApiResponse apiResponse = new ApiResponse(HttpStatus.OK, null, actions);
+//        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+//    }
 
 }

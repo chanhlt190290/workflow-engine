@@ -6,16 +6,14 @@
 package workflow.engine.service;
 
 import java.util.List;
-import workflow.engine.model.Request;
-import workflow.engine.model.Request01;
+import workflow.engine.model.Transition;
 
 /**
  *
  * @author trungchanh
  */
-public interface RequestService {
-//    Request01 getRequest(int id);
-//    List<Request01> getRequests();
-    Request create(Request req);
-    Request getById(int id);
+public interface TransitionService {
+
+    public List<Transition> findByCurrentStateId(int stateId);
+    
 }

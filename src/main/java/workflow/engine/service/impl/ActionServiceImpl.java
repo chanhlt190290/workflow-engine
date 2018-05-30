@@ -1,15 +1,13 @@
 package workflow.engine.service.impl;
 
+
+
 import java.util.List;
-
 import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import workflow.engine.dao.ActionDao;
 import workflow.engine.model.Action;
-import workflow.engine.model.Request01;
+import workflow.engine.repository.ActionRepository;
 import workflow.engine.service.ActionService;
 import workflow.engine.service.RequestService;
 
@@ -18,25 +16,41 @@ import workflow.engine.service.RequestService;
 public class ActionServiceImpl implements ActionService {
 
     @Autowired
-    private ActionDao actionDao;
+    ActionRepository actionRepo;
 
     @Autowired
     RequestService requestService;
 
     @Override
     public List<Action> getAll() {
-        return actionDao.getAll();
+        return actionRepo.findAll();
     }
 
     @Override
     public Action findById(int id) {
-        return actionDao.findById(id);
+        return actionRepo.findById(id).get();
     }
+////
+////    @Override
+////	public List<Request01> getRequests() {
+////		return requestService.getRequests();
+////	}
+
+//    @Override
+//    public List<Action> getAll() {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
+//
+//    @Override
+//    public Action findById(int id) {
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//    }
 
     @Override
-	public List<Request01> getRequests() {
-		return requestService.getRequests();
-	}
+    public Action create(Action action) {
+        Action ac = actionRepo.save(action);
+        return ac;
+    }
 
 
 

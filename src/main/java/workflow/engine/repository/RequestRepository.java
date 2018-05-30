@@ -3,19 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package workflow.engine.service;
+package workflow.engine.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
 import workflow.engine.model.Request;
-import workflow.engine.model.Request01;
 
 /**
  *
  * @author trungchanh
  */
-public interface RequestService {
-//    Request01 getRequest(int id);
-//    List<Request01> getRequests();
-    Request create(Request req);
-    Request getById(int id);
+public interface RequestRepository extends JpaRepository<Request, Integer> {
+    
 }

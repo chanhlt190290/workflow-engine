@@ -5,14 +5,24 @@
  */
 package workflow.engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import static javax.persistence.TemporalType.TIMESTAMP;
 import javax.validation.constraints.NotNull;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  *
@@ -20,12 +30,13 @@ import javax.validation.constraints.NotNull;
  */
 @Entity
 @Table(name = "request")
+@EntityListeners(AuditingEntityListener.class)
+
 public class Request implements Serializable {
 
-    
     private static final long serialVersionUID = 2303329690517682228L;
 
-	/**
+    /**
      * @return the username
      */
     public String getUsername() {
@@ -38,7 +49,6 @@ public class Request implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
-
 
     /**
      * @return the process
@@ -98,15 +108,27 @@ public class Request implements Serializable {
     @Column(name = "user_id")
     @NotNull
     private Integer user;
-    
+
     @Column(name = "username")
     @NotNull
     private String username;
-    
-    @Column(name = "current_state_id")
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "current_state_id")
     @NotNull
-    private Integer state;
-    
+    @JsonIgnore
+    private State state;
+
+//    @Column(name = "current_state_id", insertable = false, updatable = false)
+//    @NotNull
+//    private Integer stateId;
+
+    @Column(name = "date_requested", nullable = false, updatable = false)
+    @Temporal(TIMESTAMP)
+    @CreatedDate
+
+    private Date created;
+
     /**
      * @return the id
      */
@@ -124,15 +146,43 @@ public class Request implements Serializable {
     /**
      * @return the state
      */
-    public Integer getState() {
+    public State getState() {
         return state;
     }
 
     /**
      * @param stateId the state to set
      */
-    public void setState(Integer stateId) {
+    public void setState(State stateId) {
         this.state = stateId;
     }
+
+    /**
+     * @return the created
+     */
+    public Date getCreated() {
+        return created;
+    }
+
+    /**
+     * @param created the created to set
+     */
+    public void setCreated(Date created) {
+        this.created = created;
+    }
+
+//    /**
+//     * @return the stateId
+//     */
+//    public Integer getStateId() {
+//        return stateId;
+//    }
+//
+//    /**
+//     * @param stateId the stateId to set
+//     */
+//    public void setStateId(Integer stateId) {
+//        this.stateId = stateId;
+//    }
 
 }
