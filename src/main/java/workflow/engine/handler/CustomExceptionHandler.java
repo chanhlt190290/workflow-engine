@@ -5,6 +5,10 @@
  */
 package workflow.engine.handler;
 
+import java.util.Iterator;
+import java.util.Set;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +37,21 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex) {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.NOT_FOUND, ex.getMessage());
         return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public final ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
+        Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
+        Iterator<ConstraintViolation<?>> iterator = constraintViolations.iterator();
+        StringBuilder builder = new StringBuilder();
+        while (iterator.hasNext()) {
+            ConstraintViolation<?> next = iterator.next();
+            builder.append("`").append(next.getPropertyPath().toString())
+                    .append("` ").append(next.getMessage())
+                    .append(" ");
+        }
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, builder.toString());
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

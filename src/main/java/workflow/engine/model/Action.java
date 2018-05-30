@@ -57,8 +57,8 @@ public class Action implements Serializable {
                 CascadeType.MERGE
             })
     @JoinTable(name = "transition_action",
-            joinColumns = { @JoinColumn(name = "transition_id") },
-            inverseJoinColumns = { @JoinColumn(name = "action_id") })
+            joinColumns = { @JoinColumn(name = "action_id") },
+            inverseJoinColumns = { @JoinColumn(name = "transition_id") })
     private Set<Transition> transitions = new HashSet<>();
 
 

@@ -5,17 +5,21 @@
  */
 package workflow.engine.service;
 
-import java.util.List;
 import workflow.engine.model.Request;
-import workflow.engine.model.Request01;
 
 /**
  *
  * @author trungchanh
  */
 public interface RequestService {
-//    Request01 getRequest(int id);
-//    List<Request01> getRequests();
+
     Request create(Request req);
+
+    Request approve(Request req);
+
     Request getById(int id);
+
+    public void transit(Integer request, Integer transition);
+
+    public Request create(Request request, Integer stateId);
 }

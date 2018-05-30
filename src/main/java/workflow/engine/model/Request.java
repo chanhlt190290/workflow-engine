@@ -20,6 +20,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import static javax.persistence.TemporalType.TIMESTAMP;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -128,6 +129,9 @@ public class Request implements Serializable {
     @CreatedDate
 
     private Date created;
+    
+    @Transient
+    private Integer stateId;
 
     /**
      * @return the id
@@ -184,5 +188,19 @@ public class Request implements Serializable {
 //    public void setStateId(Integer stateId) {
 //        this.stateId = stateId;
 //    }
+
+    /**
+     * @return the stateId
+     */
+    public Integer getStateId() {
+        return stateId;
+    }
+
+    /**
+     * @param stateId the stateId to set
+     */
+    public void setStateId(Integer stateId) {
+        this.stateId = stateId;
+    }
 
 }

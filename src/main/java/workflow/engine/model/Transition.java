@@ -5,6 +5,7 @@
  */
 package workflow.engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -15,8 +16,11 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -43,28 +47,28 @@ public class Transition implements Serializable {
     /**
      * @return the currentState
      */
-    public Integer getCurrentState() {
+    public State getCurrentState() {
         return currentState;
     }
 
     /**
      * @param currentState the currentState to set
      */
-    public void setCurrentState(Integer currentState) {
+    public void setCurrentState(State currentState) {
         this.currentState = currentState;
     }
 
     /**
      * @return the nextState
      */
-    public Integer getNextState() {
+    public State getNextState() {
         return nextState;
     }
 
     /**
      * @param nextState the nextState to set
      */
-    public void setNextState(Integer nextState) {
+    public void setNextState(State nextState) {
         this.nextState = nextState;
     }
 
@@ -89,10 +93,22 @@ public class Transition implements Serializable {
 
     @Column(name = "process_id")
     private Integer process;
-    @Column(name = "current_state_id")
-    private Integer currentState;
-    @Column(name = "next_state_id")
-    private Integer nextState;
+    
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "current_state_id")
+    @NotNull
+    @JsonIgnore
+    private State currentState;
+    
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "next_state_id")
+    @NotNull
+    @JsonIgnore
+    private State nextState;
+    
+    
     @Column(name = "description")
     private String description;
     

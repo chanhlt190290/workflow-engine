@@ -6,6 +6,8 @@
 package workflow.engine.service;
 
 import java.util.List;
+import workflow.engine.model.Request;
+import workflow.engine.model.State;
 import workflow.engine.model.Transition;
 
 /**
@@ -14,6 +16,8 @@ import workflow.engine.model.Transition;
  */
 public interface TransitionService {
 
-    public List<Transition> findByCurrentStateId(int stateId);
+    public List<Transition> findByCurrentStateId(State state);
     
+    public void loadTransitions(Request req);
+    public void disableTransitions(Request req);
 }
