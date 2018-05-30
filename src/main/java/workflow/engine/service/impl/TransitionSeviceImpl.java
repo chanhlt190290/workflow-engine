@@ -44,31 +44,13 @@ public class TransitionSeviceImpl implements TransitionService {
         List<Transition> transitions = findByCurrentStateId(req.getState());
         for (Transition transition : transitions) {
             Set<Action> actions = transition.getActions();
-
             for (Action action : actions) {
                 RequestAction reqAction = new RequestAction();
                 reqAction.setAction(action.getId());
                 reqAction.setRequest(req);
                 reqAction.setTransition(transition);
-
-//                TypedQuery<RequestAction> query = em.createQuery("select ra from RequestAction ra where ra.actionId = ?1 and ra.request = ?2 and ra.transition = ?3", RequestAction.class);
-//                query.setParameter(1, reqAction.getAction());
-//                query.setParameter(2, reqAction.getRequest());
-//                query.setParameter(3, reqAction.getTransition());
-//
-//                List<RequestAction> ras = query.getResultList();
-//                if (!ras.isEmpty()) {
-//                    for (RequestAction ra : ras) {
-//                        ra.setIsActive(Boolean.TRUE);
-//                        ra.setIsComplete(Boolean.FALSE);
-//                        em.merge(ra);
-//                        em.flush();
-//                    }
-//                } else {
-                    em.persist(reqAction);
-                    em.flush();
-//                }
-
+                em.persist(reqAction);
+                em.flush();
             }
         }
     }
@@ -79,15 +61,12 @@ public class TransitionSeviceImpl implements TransitionService {
         for (Transition transition : transitions) {
             Set<Action> actions = transition.getActions();
             for (Action action : actions) {
-                RequestAction reqAction = new RequestAction();
-                reqAction.setAction(action.getId());
-                reqAction.setRequest(req);
-                reqAction.setTransition(transition);
-
-                TypedQuery<RequestAction> query = em.createQuery("select ra from RequestAction ra where ra.actionId = ?1 and ra.request = ?2 and ra.transition = ?3", RequestAction.class);
-                query.setParameter(1, reqAction.getAction());
-                query.setParameter(2, reqAction.getRequest());
-                query.setParameter(3, reqAction.getTransition());
+                TypedQuery<RequestAction> query
+                        = em.createQuery("select ra from RequestAction ra where ra.actionId = ?1 and ra.request = ?2 and ra.transition = ?3",
+                                RequestAction.class);
+                query.setParameter(1, action.getId());
+                query.setParameter(2, req);
+                query.setParameter(3, transition);
 
                 List<RequestAction> ras = query.getResultList();
                 if (!ras.isEmpty()) {
