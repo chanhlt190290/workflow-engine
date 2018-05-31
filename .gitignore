@@ -60,3 +60,11 @@ typings/
 # next.js build output
 .next
 /target/
+
+.classpath
+.settings/
+.project
+.vscode/
+*/yarn.lock
+*/package-lock.json
+client/README.md

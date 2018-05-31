@@ -30,7 +30,9 @@ import javax.validation.constraints.NotNull;
 @Table(name = "transition")
 public class Transition implements Serializable {
 
-    /**
+    private static final long serialVersionUID = 775042849188644497L;
+
+	/**
      * @return the process
      */
     public Integer getProcess() {
