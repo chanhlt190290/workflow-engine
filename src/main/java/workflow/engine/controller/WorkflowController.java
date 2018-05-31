@@ -5,8 +5,7 @@
  */
 package workflow.engine.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,11 +40,9 @@ public class WorkflowController {
         ApiResponse apiResponse = new ApiResponse(requestAction);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
-    
+
     @PostMapping("/requests")
-    public ResponseEntity<ApiResponse> createRequest(@RequestBody Request request) throws JsonProcessingException {
-        ObjectMapper mapper = new ObjectMapper();
-        System.out.println(mapper.writeValueAsString(request));
+    public ResponseEntity<ApiResponse> createRequest(@Valid @RequestBody Request request) {
         request = requestService.create(request, request.getStateId());
         ApiResponse apiResponse = new ApiResponse(request);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
