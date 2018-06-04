@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  *
@@ -25,22 +27,23 @@ import org.springframework.data.annotation.LastModifiedDate;
  */
 @Entity
 @Table(name = "state")
+@EntityListeners(AuditingEntityListener.class)
 public class State implements Serializable {
 
     private static final long serialVersionUID = 8644933097540474847L;
 
     /**
-     * @return the process
+     * @return the processId
      */
-    public Integer getProcess() {
-        return process;
+    public Integer getProcessId() {
+        return processId;
     }
 
     /**
-     * @param process the process to set
+     * @param process the processId to set
      */
-    public void setProcess(Integer process) {
-        this.process = process;
+    public void setProcessId(Integer process) {
+        this.processId = process;
     }
 
     /**
@@ -82,14 +85,13 @@ public class State implements Serializable {
 
     @Column(name = "process_id")
     @NotNull
-    private Integer process;
+    private Integer processId;
 
     @Column(name = "name")
     @NotNull
     private String name;
 
     @Column(name = "description", columnDefinition = "TEXT")
-    @NotNull
     private String description;
 
     @Column(name = "created_at")

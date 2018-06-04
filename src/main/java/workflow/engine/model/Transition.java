@@ -12,6 +12,7 @@ import java.util.Set;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +25,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  *
@@ -31,6 +33,7 @@ import org.springframework.data.annotation.LastModifiedDate;
  */
 @Entity
 @Table(name = "transition")
+@EntityListeners(AuditingEntityListener.class)
 public class Transition implements Serializable {
 
     private static final long serialVersionUID = 775042849188644497L;

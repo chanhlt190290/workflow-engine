@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.PersistenceException;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.springframework.beans.ConversionNotSupportedException;
@@ -196,5 +197,11 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<Object> handleException(Exception ex) {
         ApiResponse apiResponse = new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Server internal error!");
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(PersistenceException.class)
+    public final ResponseEntity<Object> handlePersistenceException(PersistenceException ex) {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, "Data constraint error!");
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 }
