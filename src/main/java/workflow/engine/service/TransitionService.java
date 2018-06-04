@@ -7,7 +7,6 @@ package workflow.engine.service;
 
 import java.util.List;
 import workflow.engine.model.Request;
-import workflow.engine.model.State;
 import workflow.engine.model.Transition;
 
 /**
@@ -16,7 +15,7 @@ import workflow.engine.model.Transition;
  */
 public interface TransitionService {
 
-    public List<Transition> findByState(State state);
+    public List<Transition> findByState(Integer state);
     
     public void loadTransitions(Request req);
 

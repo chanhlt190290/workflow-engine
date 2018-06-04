@@ -5,18 +5,23 @@
  */
 package workflow.engine.handler;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -133,7 +138,24 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, ex.getMessage());
+        BindingResult bindingResult = ex.getBindingResult();
+        List<ObjectError> allErrors = bindingResult.getAllErrors();
+        Iterator<ObjectError> iterator = allErrors.iterator();
+        List<String> errors = new ArrayList<>();
+        while (iterator.hasNext()) {
+            ObjectError next = iterator.next();
+            Object[] arguments = next.getArguments();
+            if (arguments != null) {
+                for (Object obj : arguments) {
+                    DefaultMessageSourceResolvable msg = (DefaultMessageSourceResolvable) obj;
+                    StringBuilder builder = new StringBuilder();
+                    builder.append("`").append(msg.getCode())
+                            .append("` ").append(next.getDefaultMessage());
+                    errors.add(builder.toString());
+                }
+            }
+        }
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, String.join(", ", errors));
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
@@ -158,9 +180,21 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(org.hibernate.exception.ConstraintViolationException.class)
+    public final ResponseEntity<Object> handleHibernateConstraintViolationException(org.hibernate.exception.ConstraintViolationException ex) {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, "Data constraint error!");
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(org.springframework.dao.DataIntegrityViolationException.class)
+    public final ResponseEntity<Object> handleDataIntegrityViolationException(org.springframework.dao.DataIntegrityViolationException ex) {
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, "Data constraint error!");
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<Object> handleException(Exception ex) {
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Server internal error!");
         return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

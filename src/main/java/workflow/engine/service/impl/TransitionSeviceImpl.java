@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import workflow.engine.model.Action;
 import workflow.engine.model.Request;
 import workflow.engine.model.RequestAction;
-import workflow.engine.model.State;
 import workflow.engine.model.Transition;
 import workflow.engine.service.TransitionService;
 
@@ -31,50 +30,52 @@ public class TransitionSeviceImpl implements TransitionService {
     private EntityManager em;
 
     @Override
-    public List<Transition> findByState(State state) {
-        TypedQuery<Transition> query = em.createQuery("select t from Transition t where t.currentState = ?1", Transition.class);
-        query.setParameter(1, state);
+    public List<Transition> findByState(Integer stateId) {
+        TypedQuery<Transition> query = em.createQuery("select t from Transition t where t.currentStateId = ?1", Transition.class);
+        query.setParameter(1, stateId);
         List<Transition> transitions = query.getResultList();
         return transitions;
     }
 
     @Override
     public void loadTransitions(Request req) {
-        List<Transition> transitions = findByState(req.getState());
-        for (Transition transition : transitions) {
+        List<Transition> transitions = findByState(req.getStateId());
+        transitions.forEach((transition) -> {
             Set<Action> actions = transition.getActions();
-            for (Action action : actions) {
+            actions.stream().map((action) -> {
                 RequestAction reqAction = new RequestAction();
                 reqAction.setAction(action.getId());
-                reqAction.setRequest(req);
-                reqAction.setTransition(transition);
+                return reqAction;
+            }).map((reqAction) -> {
+                reqAction.setRequestId(req.getId());
+                return reqAction;
+            }).map((reqAction) -> {
+                reqAction.setTransitionId(transition.getId());
+                return reqAction;
+            }).forEachOrdered((reqAction) -> {
                 em.persist(reqAction);
-            }
-        }
+            });
+        });
     }
 
     @Override
     public void disableTransitions(Request req) {
-        List<Transition> transitions = findByState(req.getState());
-        for (Transition transition : transitions) {
-            Set<Action> actions = transition.getActions();
-            for (Action action : actions) {
-                TypedQuery<RequestAction> query
-                        = em.createQuery("select ra from RequestAction ra where ra.actionId = ?1 and ra.request = ?2 and ra.transition = ?3",
-                                RequestAction.class);
-                query.setParameter(1, action.getId());
-                query.setParameter(2, req);
-                query.setParameter(3, transition);
-
-                List<RequestAction> ras = query.getResultList();
-                if (!ras.isEmpty()) {
-                    for (RequestAction ra : ras) {
-                        ra.setIsActive(Boolean.FALSE);
-                        em.flush();
-                    }
-                }
-            }
-        }
+        List<Transition> transitions = findByState(req.getStateId());
+        transitions.stream().map((transition) -> {
+            TypedQuery<RequestAction> query
+                    = em.createQuery("select ra from RequestAction ra where ra.requestId = ?1 and ra.transitionId = ?2",
+                            RequestAction.class);
+            query.setParameter(1, req.getId());
+            query.setParameter(2, transition.getId());
+            return query;
+        }).map((query) -> query.getResultList()).filter((ras) -> (!ras.isEmpty())).forEachOrdered((ras) -> {
+            ras.stream().map((ra) -> {
+                ra.setIsActive(Boolean.FALSE);
+                return ra;
+            }).forEachOrdered((_item) -> {
+                em.flush();
+            });
+        });
     }
 
 }

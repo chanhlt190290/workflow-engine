@@ -11,7 +11,6 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import workflow.engine.model.Request;
-import workflow.engine.model.State;
 import workflow.engine.service.RequestService;
 import workflow.engine.service.TransitionService;
 
@@ -39,16 +38,5 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Request getById(int id) {
         return em.find(Request.class, id);
-    }
-
-
-    @Override
-    public Request create(Request req, Integer stateId) {
-        State state = new State();
-        state.setId(stateId);
-        req.setState(state);
-        em.persist(req);
-        transitionService.loadTransitions(req);
-        return req;
     }
 }

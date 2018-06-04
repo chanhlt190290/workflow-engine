@@ -33,13 +33,13 @@ public class RequestActionServiceImpl implements RequestActionService {
     TransitionService transitionService;
 
     @Override
-    public RequestAction getRequestAction(int id) {
+    public RequestAction get(int id) {
         return em.find(RequestAction.class, id);
     }
 
     @Override
-    public RequestAction performAction(int id) {
-        RequestAction requestAction = getRequestAction(id);
+    public RequestAction perform(int id) {
+        RequestAction requestAction = get(id);
         if (requestAction.getIsComplete() || requestAction.getIsActive() == false) {
             return requestAction;
         }
@@ -49,7 +49,7 @@ public class RequestActionServiceImpl implements RequestActionService {
         em.persist(requestAction);
         em.flush();
 
-        List<RequestAction> requestActions = findByTransition(requestAction.getTransition(), requestAction.getRequest());
+        List<RequestAction> requestActions = findByTransition(requestAction.getTransitionId(), requestAction.getRequestId());
 
         boolean isComplete = true;
         for (RequestAction ra : requestActions) {
@@ -59,20 +59,20 @@ public class RequestActionServiceImpl implements RequestActionService {
             }
         }
         if (isComplete) {
-            Request request = requestAction.getRequest();
+            Request request = em.find(Request.class, requestAction.getRequestId());
             transitionService.disableTransitions(request);
-            Transition transition = requestAction.getTransition();
-            request.setState(transition.getNextState());
+            Transition transition = em.find(Transition.class, requestAction.getTransitionId());
+            request.setStateId(transition.getNextStateId());
             em.persist(request);
             transitionService.loadTransitions(request);
         }
         return requestAction;
     }
 
-    private List<RequestAction> findByTransition(Transition transition, Request request) {
-        TypedQuery<RequestAction> query = em.createQuery("select ra from RequestAction ra where ra.transition = ?1 and ra.request = ?2 and ra.isActive = true and ra.isComplete = false", RequestAction.class);
-        query.setParameter(1, transition);
-        query.setParameter(2, request);
+    private List<RequestAction> findByTransition(Integer transitionId, Integer requestId) {
+        TypedQuery<RequestAction> query = em.createQuery("select ra from RequestAction ra where ra.transitionId = ?1 and ra.requestId = ?2 and ra.isActive = true and ra.isComplete = false", RequestAction.class);
+        query.setParameter(1, transitionId);
+        query.setParameter(2, requestId);
         List<RequestAction> ras = query.getResultList();
         return ras;
     }

@@ -5,24 +5,20 @@
  */
 package workflow.engine.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
-import static javax.persistence.TemporalType.TIMESTAMP;
-import javax.persistence.Transient;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -32,38 +28,23 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Entity
 @Table(name = "request")
 @EntityListeners(AuditingEntityListener.class)
-
 public class Request implements Serializable {
 
+    /**
+     * @return the processId
+     */
+    public Integer getProcessId() {
+        return processId;
+    }
+
+    /**
+     * @param processId the processId to set
+     */
+    public void setProcessId(Integer processId) {
+        this.processId = processId;
+    }
+
     private static final long serialVersionUID = 2303329690517682228L;
-
-    /**
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * @param username the username to set
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     * @return the process
-     */
-    public Integer getProcess() {
-        return process;
-    }
-
-    /**
-     * @param process the process to set
-     */
-    public void setProcess(Integer process) {
-        this.process = process;
-    }
 
     /**
      * @return the title
@@ -79,59 +60,39 @@ public class Request implements Serializable {
         this.title = title;
     }
 
-    /**
-     * @return the user
-     */
-    public Integer getUser() {
-        return user;
-    }
-
-    /**
-     * @param user the user to set
-     */
-    public void setUser(Integer user) {
-        this.user = user;
-    }
-
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
-
-    @Column(name = "process_id")
     @NotNull
-    private Integer process;
+    private Integer id;
 
     @Column(name = "title")
     @NotNull
     private String title;
 
-    @Column(name = "user_id")
-    @NotNull
-    private Integer user;
-
-    @Column(name = "username")
-    @NotNull
-    private String username;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "current_state_id")
-    @NotNull
-    @JsonIgnore
-    private State state;
-
-//    @Column(name = "current_state_id", insertable = false, updatable = false)
-//    @NotNull
-//    private Integer stateId;
-
-    @Column(name = "date_requested", nullable = false, updatable = false)
-    @Temporal(TIMESTAMP)
-    @CreatedDate
-
-    private Date created;
-    
-    @Transient
+    @Column(name = "state_id")
     private Integer stateId;
+
+    @Column(name = "process_id")
+    @NotNull
+    private Integer processId;
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date createdAt;
+
+    @Column(name = "created_by")
+    @NotNull
+    private Integer createdBy;
+
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
+    private Date updatedAt;
+
+    @Column(name = "updated_by")
+    @NotNull
+    private Integer updatedBy;
 
     /**
      * @return the id
@@ -148,48 +109,6 @@ public class Request implements Serializable {
     }
 
     /**
-     * @return the state
-     */
-    public State getState() {
-        return state;
-    }
-
-    /**
-     * @param stateId the state to set
-     */
-    public void setState(State stateId) {
-        this.state = stateId;
-    }
-
-    /**
-     * @return the created
-     */
-    public Date getCreated() {
-        return created;
-    }
-
-    /**
-     * @param created the created to set
-     */
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-//    /**
-//     * @return the stateId
-//     */
-//    public Integer getStateId() {
-//        return stateId;
-//    }
-//
-//    /**
-//     * @param stateId the stateId to set
-//     */
-//    public void setStateId(Integer stateId) {
-//        this.stateId = stateId;
-//    }
-
-    /**
      * @return the stateId
      */
     public Integer getStateId() {
@@ -201,6 +120,62 @@ public class Request implements Serializable {
      */
     public void setStateId(Integer stateId) {
         this.stateId = stateId;
+    }
+
+    /**
+     * @return the createdAt
+     */
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @param createdAt the createdAt to set
+     */
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    /**
+     * @return the createdBy
+     */
+    public Integer getCreatedBy() {
+        return createdBy;
+    }
+
+    /**
+     * @param createdBy the createdBy to set
+     */
+    public void setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    /**
+     * @return the updatedAt
+     */
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /**
+     * @param updatedAt the updatedAt to set
+     */
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    /**
+     * @return the updatedBy
+     */
+    public Integer getUpdatedBy() {
+        return updatedBy;
+    }
+
+    /**
+     * @param updatedBy the updatedBy to set
+     */
+    public void setUpdatedBy(Integer updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
 }

@@ -5,16 +5,13 @@
  */
 package workflow.engine.service;
 
-import workflow.engine.model.RequestAction;
+import workflow.engine.model.Process;
 
 /**
  *
  * @author trungchanh
  */
-public interface RequestActionService {
+public interface ProcessService {
 
-    public RequestAction get(int id);
-
-    public RequestAction perform(int id);
-    
+    Process create(Process process);
 }

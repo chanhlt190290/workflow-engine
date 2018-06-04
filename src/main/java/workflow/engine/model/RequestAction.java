@@ -5,18 +5,16 @@
  */
 package workflow.engine.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -24,51 +22,35 @@ import javax.validation.constraints.NotNull;
  * @author trungchanh
  */
 @Entity
-@Table(name = "request_action", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"transition_id", "request_id", "action_id"})})
-//@EntityListeners(AuditingEntityListener.class)
+@Table(name = "request_action")
 public class RequestAction implements Serializable {
 
     /**
-     * @return the request
+     * @return the completedAt
      */
-    public Request getRequest() {
-        return request;
+    public Date getCompletedAt() {
+        return completedAt;
     }
 
     /**
-     * @param request the request to set
+     * @param completedAt the completedAt to set
      */
-    public void setRequest(Request request) {
-        this.request = request;
-    }
-
-    /**
-     * @return the transition
-     */
-    public Transition getTransition() {
-        return transition;
-    }
-
-    /**
-     * @param transition the transition to set
-     */
-    public void setTransition(Transition transition) {
-        this.transition = transition;
+    public void setCompletedAt(Date completedAt) {
+        this.completedAt = completedAt;
     }
 
     /**
      * @return the actionId
      */
     public Integer getAction() {
-        return actionId;
+        return getActionId();
     }
 
     /**
      * @param action the actionId to set
      */
     public void setAction(Integer action) {
-        this.actionId = action;
+        this.setActionId(action);
     }
 
     /**
@@ -120,25 +102,13 @@ public class RequestAction implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "request_id")
     @NotNull
-    @JsonIgnore
-    private Request request;
+    private Integer requestId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "transition_id")
     @NotNull
-    @JsonIgnore
-    private Transition transition;
+    private Integer transitionId;
 
     @Column(name = "action_id")
     @NotNull
@@ -147,10 +117,72 @@ public class RequestAction implements Serializable {
     @Column(name = "completed_by")
     private Integer completedBy;
 
+    @Column(name = "completed_at")
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date completedAt;
+
     @Column(name = "is_active")
+    @NotNull
     private Boolean isActive = true;
 
     @Column(name = "is_complete")
+    @NotNull
     private Boolean isComplete = false;
+
+    /**
+     * @return the id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the requestId
+     */
+    public Integer getRequestId() {
+        return requestId;
+    }
+
+    /**
+     * @param requestId the requestId to set
+     */
+    public void setRequestId(Integer requestId) {
+        this.requestId = requestId;
+    }
+
+    /**
+     * @return the transitionId
+     */
+    public Integer getTransitionId() {
+        return transitionId;
+    }
+
+    /**
+     * @param transitionId the transitionId to set
+     */
+    public void setTransitionId(Integer transitionId) {
+        this.transitionId = transitionId;
+    }
+
+    /**
+     * @return the actionId
+     */
+    public Integer getActionId() {
+        return actionId;
+    }
+
+    /**
+     * @param actionId the actionId to set
+     */
+    public void setActionId(Integer actionId) {
+        this.actionId = actionId;
+    }
 
 }

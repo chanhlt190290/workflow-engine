@@ -17,5 +17,4 @@ public interface RequestService {
 
     Request getById(int id);
 
-    public Request create(Request request, Integer stateId);
 }

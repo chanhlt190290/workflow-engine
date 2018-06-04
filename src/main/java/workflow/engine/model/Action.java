@@ -1,12 +1,14 @@
 package workflow.engine.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -14,9 +16,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  *
@@ -24,82 +30,63 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "action")
-@NamedQueries({
-    @NamedQuery(
-        name = "findActionById",
-        query = "from Action a where a.id = :id"
-        ),
-})
+@EntityListeners(AuditingEntityListener.class)
 public class Action implements Serializable {
 
-    private static final long serialVersionUID = 4277037918733220692L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
-
-    @Column(name = "action_type_id")
-    private Integer type;
-
-    @Column(name = "process_id")
-    private Integer process;
-
-    @Column(name = "name")
-    private String name;
-
-    @Column(name = "description")
-    private String description;
-    
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-            })
-    @JoinTable(name = "transition_action",
-            joinColumns = { @JoinColumn(name = "action_id") },
-            inverseJoinColumns = { @JoinColumn(name = "transition_id") })
-    private Set<Transition> transitions = new HashSet<>();
-
-
-    public Integer getId(){
-        return this.id;
+    /**
+     * @return the createdAt
+     */
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setId(Integer id){
-        this.id =  id;
+    /**
+     * @param createdAt the createdAt to set
+     */
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
-    public Integer getType(){
-        return this.type;
+    /**
+     * @return the createdBy
+     */
+    public Integer getCreatedBy() {
+        return createdBy;
     }
 
-    public void setType(Integer id){
-        this.type =  id;
+    /**
+     * @param createdBy the createdBy to set
+     */
+    public void setCreatedBy(Integer createdBy) {
+        this.createdBy = createdBy;
     }
 
-    public Integer getProcess(){
-        return this.process;
+    /**
+     * @return the updatedAt
+     */
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 
-    public void setProcess(Integer id){
-        this.process =  id;
+    /**
+     * @param updatedAt the updatedAt to set
+     */
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
-    public String getName(){
-        return this.name;
+    /**
+     * @return the updatedBy
+     */
+    public Integer getUpdatedBy() {
+        return updatedBy;
     }
 
-    public void setName(String name){
-        this.name =  name;
-    }
-
-    public String getDescription(){
-        return this.description;
-    }
-
-    public void setDescription(String description){
-        this.description =  description;
+    /**
+     * @param updatedBy the updatedBy to set
+     */
+    public void setUpdatedBy(Integer updatedBy) {
+        this.updatedBy = updatedBy;
     }
 
     /**
@@ -115,4 +102,110 @@ public class Action implements Serializable {
     public void setTransitions(Set<Transition> transitions) {
         this.transitions = transitions;
     }
+
+    private static final long serialVersionUID = 4277037918733220692L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Integer id;
+
+    @Column(name = "action_type_id")
+    @NotNull
+    private Integer actionTypeId;
+
+    @Column(name = "process_id")
+    @NotNull
+    private Integer processId;
+
+    @Column(name = "name")
+    @NotNull
+    private String name;
+
+    @Column(name = "description")
+    @NotNull
+    private String description;
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreatedDate
+    private Date createdAt;
+
+    @Column(name = "created_by")
+    @NotNull
+    private Integer createdBy;
+
+    @Column(name = "updated_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @LastModifiedDate
+    private Date updatedAt;
+
+    @Column(name = "updated_by")
+    @NotNull
+    private Integer updatedBy;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.MERGE
+            })
+    @JoinTable(name = "transition_action",
+            joinColumns = {
+                @JoinColumn(name = "action_id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "transition_id")})
+    private Set<Transition> transitions = new HashSet<>();
+
+    public Integer getId() {
+        return this.id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the actionTypeId
+     */
+    public Integer getActionTypeId() {
+        return actionTypeId;
+    }
+
+    /**
+     * @param actionTypeId the actionTypeId to set
+     */
+    public void setActionTypeId(Integer actionTypeId) {
+        this.actionTypeId = actionTypeId;
+    }
+
+    /**
+     * @return the processId
+     */
+    public Integer getProcessId() {
+        return processId;
+    }
+
+    /**
+     * @param processId the processId to set
+     */
+    public void setProcessId(Integer processId) {
+        this.processId = processId;
+    }
+
 }

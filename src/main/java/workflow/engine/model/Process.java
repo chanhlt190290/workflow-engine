@@ -9,6 +9,7 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,79 +19,27 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
  *
  * @author trungchanh
  */
 @Entity
-@Table(name = "state")
-public class State implements Serializable {
+@Table(name = "process")
+@EntityListeners(AuditingEntityListener.class)
+public class Process implements Serializable {
 
-    private static final long serialVersionUID = 8644933097540474847L;
-
-    /**
-     * @return the process
-     */
-    public Integer getProcess() {
-        return process;
-    }
-
-    /**
-     * @param process the process to set
-     */
-    public void setProcess(Integer process) {
-        this.process = process;
-    }
-
-    /**
-     * @return the name
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * @param name the name to set
-     */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return the description
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * @param description the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
+    private static final long serialVersionUID = 4277037918733220692L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
 
-    @Column(name = "state_type_id")
-    @NotNull
-    private Integer stateTypeId;
-
-    @Column(name = "process_id")
-    @NotNull
-    private Integer process;
-
     @Column(name = "name")
     @NotNull
     private String name;
-
-    @Column(name = "description", columnDefinition = "TEXT")
-    @NotNull
-    private String description;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -109,6 +58,34 @@ public class State implements Serializable {
     @Column(name = "updated_by")
     @NotNull
     private Integer updatedBy;
+
+    /**
+     * @return the id
+     */
+    public Integer getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    /**
+     * @return the name
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * @param name the name to set
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
 
     /**
      * @return the createdAt
@@ -165,33 +142,4 @@ public class State implements Serializable {
     public void setUpdatedBy(Integer updatedBy) {
         this.updatedBy = updatedBy;
     }
-
-    /**
-     * @return the id
-     */
-    public Integer getId() {
-        return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
-    /**
-     * @return the stateTypeId
-     */
-    public Integer getStateTypeId() {
-        return stateTypeId;
-    }
-
-    /**
-     * @param stateTypeId the stateTypeId to set
-     */
-    public void setStateTypeId(Integer stateTypeId) {
-        this.stateTypeId = stateTypeId;
-    }
-
 }

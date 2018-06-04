@@ -24,7 +24,7 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public List<Action> getAll() {
-        return em.createQuery("from Action", Action.class).getResultList();
+        return em.createQuery("select a from Action a", Action.class).getResultList();
     }
 
     @Override
