@@ -67,28 +67,28 @@ public class Target implements Serializable {
     /**
      * @return the userId
      */
-    public Long getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
     /**
      * @param userId the userId to set
      */
-    public void setUserId(Long userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
     /**
      * @return the userGroupId
      */
-    public Long getUserGroupId() {
+    public Integer getUserGroupId() {
         return userGroupId;
     }
 
     /**
      * @param userGroupId the userGroupId to set
      */
-    public void setUserGroupId(Long userGroupId) {
+    public void setUserGroupId(Integer userGroupId) {
         this.userGroupId = userGroupId;
     }
 
@@ -109,10 +109,10 @@ public class Target implements Serializable {
 
     @Column(name = "user_id")
     @NotNull
-    private Long userId;
+    private Integer userId;
 
     @Column(name = "user_group_id")
     @NotNull
-    private Long userGroupId;
+    private Integer userGroupId;
 
 }

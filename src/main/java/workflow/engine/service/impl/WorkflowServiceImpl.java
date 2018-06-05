@@ -38,7 +38,7 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
 
     @Override
-    public RequestAction doRequestAction(int actionId, int userId) {
+    public RequestAction doRequestAction(int requestId, int actionId, int userId) {
         RequestAction action = em.find(RequestAction.class, actionId);
         if (action.getIsComplete() || action.getIsActive() == false) {
             throw new ResourceNotFoundException("action", "id", actionId);
@@ -49,18 +49,10 @@ public class WorkflowServiceImpl implements WorkflowService {
         boolean transitionCompleted = checkTransitionCompleted(action);
 
         if (transitionCompleted) {
-            transitRequest(action);
+            transitRequest(requestId, action.getTransitionId());
         }
         return action;
 
-    }
-
-    private List<RequestAction> getAvailableActions(Integer transitionId, Integer requestId) {
-        TypedQuery<RequestAction> query = em.createQuery("select ra from RequestAction ra where ra.transitionId = ?1 and ra.requestId = ?2 and ra.isActive = true", RequestAction.class);
-        query.setParameter(1, transitionId);
-        query.setParameter(2, requestId);
-        List<RequestAction> ras = query.getResultList();
-        return ras;
     }
 
     private List<Transition> findByState(Integer stateId) {
@@ -105,10 +97,10 @@ public class WorkflowServiceImpl implements WorkflowService {
         });
     }
 
-    private void transitRequest(RequestAction action) {
-        Request request = em.find(Request.class, action.getRequestId());
+    private void transitRequest(int requestId, int transitionId) {
+        Request request = em.find(Request.class, requestId);
         disableCurrentActions(request);
-        Transition transition = em.find(Transition.class, action.getTransitionId());
+        Transition transition = em.find(Transition.class, transitionId);
         request.setStateId(transition.getNextStateId());
         em.persist(request);
         loadNewActions(request);
@@ -123,7 +115,21 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
 
     private boolean checkTransitionCompleted(RequestAction action) {
-        List<RequestAction> remainActions = getAvailableActions(action.getTransitionId(), action.getRequestId());
+        List<RequestAction> remainActions = getAvailableActions(action.getRequestId());
         return remainActions.isEmpty();
+    }
+
+    @Override
+    public Request getRequest(int requestId) {
+        Request request = em.find(Request.class, requestId);
+        return request;
+    }
+
+    @Override
+    public List<RequestAction> getAvailableActions(int requestId) {
+        TypedQuery<RequestAction> query = em.createQuery("select ra from RequestAction ra where ra.requestId = :requestId and ra.isActive = true", RequestAction.class);
+        query.setParameter("requestId", requestId);
+        List<RequestAction> ras = query.getResultList();
+        return ras;
     }
 }

@@ -126,7 +126,7 @@ public class Activity implements Serializable {
     @NotNull
     private String name;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     @NotNull
     private String description;
 
