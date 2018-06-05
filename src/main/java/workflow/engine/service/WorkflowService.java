@@ -17,7 +17,7 @@ public interface WorkflowService {
 
     Request makeRequest(Request request);
 
-    RequestAction doRequestAction(int requestId, int actionId, int userId);
+    Request doRequestAction(int requestId, int actionId, int userId);
 
     Request getRequest(int requestId);
     

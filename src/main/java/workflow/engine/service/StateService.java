@@ -5,6 +5,7 @@
  */
 package workflow.engine.service;
 
+import java.util.List;
 import workflow.engine.model.State;
 
 /**
@@ -14,4 +15,6 @@ import workflow.engine.model.State;
 public interface StateService {
 
     State create(State state);
+
+    public State addActivities(int stateId, List<Integer> activityIds);
 }

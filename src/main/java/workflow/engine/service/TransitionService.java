@@ -18,4 +18,6 @@ public interface TransitionService {
 
     public Transition addActions(int transitionId, List<Integer> actionIds);
 
+    public Transition addActivities(int transitionId, List<Integer> activityIds);
+
 }

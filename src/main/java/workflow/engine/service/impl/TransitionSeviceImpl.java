@@ -6,12 +6,12 @@
 package workflow.engine.service.impl;
 
 import java.util.List;
-import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import workflow.engine.model.Action;
+import workflow.engine.model.Activity;
 import workflow.engine.model.Transition;
 import workflow.engine.service.TransitionService;
 
@@ -38,6 +38,17 @@ public class TransitionSeviceImpl implements TransitionService {
         for (Integer actionId : actionIds) {
             Action action = em.find(Action.class, actionId);
             transition.getActions().add(action);
+        }
+        em.flush();
+        return transition;
+    }
+
+    @Override
+    public Transition addActivities(int transitionId, List<Integer> activityIds) {
+        Transition transition = em.find(Transition.class, transitionId);
+        for (Integer activityId : activityIds) {
+            Activity activity = em.find(Activity.class, activityId);
+            transition.getActivities().add(activity);
         }
         em.flush();
         return transition;

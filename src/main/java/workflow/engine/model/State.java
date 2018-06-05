@@ -7,12 +7,19 @@ package workflow.engine.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -29,6 +36,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "state")
 @EntityListeners(AuditingEntityListener.class)
 public class State implements Serializable {
+
+    /**
+     * @return the activities
+     */
+    public Set<Activity> getActivities() {
+        return activities;
+    }
+
+    /**
+     * @param activities the activities to set
+     */
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
+    }
 
     private static final long serialVersionUID = 8644933097540474847L;
 
@@ -111,6 +132,14 @@ public class State implements Serializable {
     @Column(name = "updated_by")
     @NotNull
     private Integer updatedBy;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "state_activity",
+            inverseJoinColumns = {
+                @JoinColumn(name = "activity_id", referencedColumnName = "id")},
+            joinColumns = {
+                @JoinColumn(name = "state_id", referencedColumnName = "id")})
+    private Set<Activity> activities = new HashSet<>();
 
     /**
      * @return the createdAt

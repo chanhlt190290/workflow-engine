@@ -38,20 +38,21 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
 
     @Override
-    public RequestAction doRequestAction(int requestId, int actionId, int userId) {
+    public Request doRequestAction(int requestId, int actionId, int userId) {
         RequestAction action = em.find(RequestAction.class, actionId);
-        if (action.getIsComplete() || action.getIsActive() == false) {
+        if (action == null || action.getIsComplete() || action.getIsActive() == false) {
             throw new ResourceNotFoundException("action", "id", actionId);
         }
-
-        completeAction(action, userId);
-
-        boolean transitionCompleted = checkTransitionCompleted(action);
-
-        if (transitionCompleted) {
-            transitRequest(requestId, action.getTransitionId());
+        Request request = em.find(Request.class, requestId);
+        if (request == null) {
+            throw new ResourceNotFoundException("request", "id", requestId);
         }
-        return action;
+        completeAction(action, userId);
+        boolean transitionCompleted = checkTransitionCompleted(action);
+        if (transitionCompleted) {
+            transitRequest(request, action.getTransitionId());
+        }
+        return request;
 
     }
 
@@ -97,8 +98,7 @@ public class WorkflowServiceImpl implements WorkflowService {
         });
     }
 
-    private void transitRequest(int requestId, int transitionId) {
-        Request request = em.find(Request.class, requestId);
+    private void transitRequest(Request request, int transitionId) {
         disableCurrentActions(request);
         Transition transition = em.find(Transition.class, transitionId);
         request.setStateId(transition.getNextStateId());
@@ -132,4 +132,5 @@ public class WorkflowServiceImpl implements WorkflowService {
         List<RequestAction> ras = query.getResultList();
         return ras;
     }
+
 }

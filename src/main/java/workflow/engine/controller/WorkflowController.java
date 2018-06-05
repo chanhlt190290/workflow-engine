@@ -43,8 +43,8 @@ public class WorkflowController {
     @PostMapping(value = "/requests/{requestId}/actions/{actionId}", consumes = "application/json")
     public ResponseEntity<ApiResponse> performAction(@PathVariable("requestId") int requestId,
             @PathVariable("actionId") int actionId, @RequestParam("userId") int userId) {
-        RequestAction requestAction = workflowService.doRequestAction(requestId, actionId, userId);
-        ApiResponse apiResponse = new ApiResponse(requestAction);
+        Request request = workflowService.doRequestAction(requestId, actionId, userId);
+        ApiResponse apiResponse = new ApiResponse(request);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
@@ -54,7 +54,7 @@ public class WorkflowController {
         ApiResponse apiResponse = new ApiResponse(request);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
-    
+
     @GetMapping(value = "/requests/{requestId}/actions")
     public ResponseEntity<ApiResponse> getAvailableActions(@PathVariable("requestId") int requestId) {
         List<RequestAction> availableActions = workflowService.getAvailableActions(requestId);

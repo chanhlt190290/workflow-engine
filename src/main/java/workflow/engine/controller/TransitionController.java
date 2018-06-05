@@ -43,4 +43,11 @@ public class TransitionController {
         ApiResponse apiResponse = new ApiResponse(transition);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+    
+    @PostMapping(value = "/transitions/{transitionId}/activities", consumes = "application/json")
+    public ResponseEntity<ApiResponse> addActivities(@PathVariable("transitionId") int transitionId, @Valid @RequestBody List<Integer> activityIds) {
+        Transition transition = transitionService.addActivities(transitionId, activityIds);
+        ApiResponse apiResponse = new ApiResponse(transition);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
 }
