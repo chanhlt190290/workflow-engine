@@ -6,15 +6,16 @@
 package workflow.engine.service;
 
 import workflow.engine.model.Request;
+import workflow.engine.model.RequestAction;
 
 /**
  *
  * @author trungchanh
  */
-public interface RequestService {
+public interface WorkflowService {
 
-    Request create(Request req);
+    Request makeRequest(Request request);
 
-    Request getById(int id);
+    RequestAction doRequestAction(int actionId, int userId);
 
 }

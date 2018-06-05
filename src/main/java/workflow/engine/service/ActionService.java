@@ -1,12 +1,11 @@
 package workflow.engine.service;
 
-import java.util.List;
 import workflow.engine.model.Action;
 
-public interface ActionService{
+public interface ActionService {
 
-    List<Action> getAll();
-    Action findById(int id);
+    Action get(int id);
+
     Action create(Action action);
 
 }

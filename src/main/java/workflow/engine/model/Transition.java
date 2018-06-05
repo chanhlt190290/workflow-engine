@@ -36,6 +36,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class Transition implements Serializable {
 
+    /**
+     * @return the activities
+     */
+    public Set<Activity> getActivities() {
+        return activities;
+    }
+
+    /**
+     * @param activities the activities to set
+     */
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
+    }
+
     private static final long serialVersionUID = 775042849188644497L;
 
     /**
@@ -93,6 +107,14 @@ public class Transition implements Serializable {
             },
             mappedBy = "transitions")
     private Set<Action> actions = new HashSet<>();
+    
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                CascadeType.PERSIST,
+                CascadeType.MERGE
+            },
+            mappedBy = "transitions")
+    private Set<Activity> activities = new HashSet<>();
 
     /**
      * @return the id

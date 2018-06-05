@@ -12,5 +12,6 @@ import workflow.engine.model.State;
  * @author trungchanh
  */
 public interface StateService {
+
     State create(State state);
 }

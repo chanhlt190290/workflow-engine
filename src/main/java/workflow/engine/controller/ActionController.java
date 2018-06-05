@@ -5,16 +5,17 @@
  */
 package workflow.engine.controller;
 
+import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import workflow.engine.model.Action;
 import workflow.engine.model.ApiResponse;
-import workflow.engine.model.RequestAction;
-import workflow.engine.service.RequestActionService;
+import workflow.engine.service.ActionService;
 
 /**
  *
@@ -22,15 +23,15 @@ import workflow.engine.service.RequestActionService;
  */
 @RestController
 @RequestMapping("/api/v1")
-public class RequestActionController {
+public class ActionController {
 
     @Autowired
-    private RequestActionService requestActionService;
+    ActionService actionService;
 
-    @PostMapping("/actions/{id}")
-    public ResponseEntity<ApiResponse> perform(@PathVariable int id) {
-        RequestAction requestAction = requestActionService.perform(id);
-        ApiResponse apiResponse = new ApiResponse(requestAction);
+    @PostMapping(value = "/actions", consumes = "application/json")
+    public ResponseEntity<ApiResponse> create(@Valid @RequestBody Action action) {
+        action = actionService.create(action);
+        ApiResponse apiResponse = new ApiResponse(action);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }

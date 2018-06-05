@@ -170,14 +170,15 @@ public class CustomExceptionHandler extends ResponseEntityExceptionHandler {
     public final ResponseEntity<Object> handleConstraintViolationException(ConstraintViolationException ex) {
         Set<ConstraintViolation<?>> constraintViolations = ex.getConstraintViolations();
         Iterator<ConstraintViolation<?>> iterator = constraintViolations.iterator();
-        StringBuilder builder = new StringBuilder();
+        List<String> errors = new ArrayList<>();
         while (iterator.hasNext()) {
             ConstraintViolation<?> next = iterator.next();
+            StringBuilder builder = new StringBuilder();
             builder.append("`").append(next.getPropertyPath().toString())
-                    .append("` ").append(next.getMessage())
-                    .append(" ");
+                    .append("` ").append(next.getMessage());
+            errors.add(builder.toString());
         }
-        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, builder.toString());
+        ApiResponse apiResponse = new ApiResponse(HttpStatus.BAD_REQUEST, String.join(", ", errors));
         return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 

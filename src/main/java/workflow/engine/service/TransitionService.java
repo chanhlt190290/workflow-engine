@@ -5,19 +5,10 @@
  */
 package workflow.engine.service;
 
-import java.util.List;
-import workflow.engine.model.Request;
-import workflow.engine.model.Transition;
-
 /**
  *
  * @author trungchanh
  */
 public interface TransitionService {
 
-    public List<Transition> findByState(Integer state);
-    
-    public void loadTransitions(Request req);
-
-    public void disableTransitions(Request req);
 }

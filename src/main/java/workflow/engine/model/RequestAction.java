@@ -40,20 +40,6 @@ public class RequestAction implements Serializable {
     }
 
     /**
-     * @return the actionId
-     */
-    public Integer getAction() {
-        return getActionId();
-    }
-
-    /**
-     * @param action the actionId to set
-     */
-    public void setAction(Integer action) {
-        this.setActionId(action);
-    }
-
-    /**
      * @return the completedBy
      */
     public Integer getCompletedBy() {

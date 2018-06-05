@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import workflow.engine.model.Action;
 import workflow.engine.model.ApiResponse;
-import workflow.engine.model.Request;
-import workflow.engine.service.RequestService;
+import workflow.engine.service.ActionService;
 
 /**
  *
@@ -23,15 +23,14 @@ import workflow.engine.service.RequestService;
  */
 @RestController
 @RequestMapping("/api/v1")
-public class RequestController {
-
+public class ActivityController {
     @Autowired
-    RequestService requestService;
+    ActionService actionService;
 
-    @PostMapping("/requests")
-    public ResponseEntity<ApiResponse> create(@Valid @RequestBody Request request) {
-        request = requestService.create(request);
-        ApiResponse apiResponse = new ApiResponse(request);
+    @PostMapping(value = "/activities", consumes = "application/json")
+    public ResponseEntity<ApiResponse> create(@Valid @RequestBody Action action) {
+        action = actionService.create(action);
+        ApiResponse apiResponse = new ApiResponse(action);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }

@@ -28,7 +28,7 @@ public class StateController {
     @Autowired
     StateService stateService;
 
-    @PostMapping("/states")
+    @PostMapping(value = "/states", consumes = "application/json")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody State state) {
         state = stateService.create(state);
         ApiResponse apiResponse = new ApiResponse(state);

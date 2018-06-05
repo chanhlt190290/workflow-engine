@@ -28,7 +28,7 @@ public class ProcessController {
     @Autowired
     ProcessService processService;
 
-    @PostMapping("/processes")
+    @PostMapping(value = "/processes", consumes = "application/json")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody Process process) {
         process = processService.create(process);
         ApiResponse apiResponse = new ApiResponse(process);
