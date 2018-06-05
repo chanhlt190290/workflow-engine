@@ -5,10 +5,12 @@
  */
 package workflow.engine.controller;
 
+import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,13 @@ public class ActionController {
     @PostMapping(value = "/actions", consumes = "application/json")
     public ResponseEntity<ApiResponse> create(@Valid @RequestBody Action action) {
         action = actionService.create(action);
+        ApiResponse apiResponse = new ApiResponse(action);
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+    
+    @PostMapping(value = "/actions/{actionId}/targets", consumes = "application/json")
+    public ResponseEntity<ApiResponse> addTargets(@PathVariable("actionId") int actionId, @Valid @RequestBody List<Integer> targetIds) {
+        Action action = actionService.addTargets(actionId, targetIds);
         ApiResponse apiResponse = new ApiResponse(action);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }

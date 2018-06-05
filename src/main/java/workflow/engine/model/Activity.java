@@ -5,6 +5,7 @@
  */
 package workflow.engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -36,6 +37,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "activity")
 @EntityListeners(AuditingEntityListener.class)
 public class Activity implements Serializable {
+
+    /**
+     * @return the targets
+     */
+    public Set<Target> getTargets() {
+        return targets;
+    }
+
+    /**
+     * @param targets the targets to set
+     */
+    public void setTargets(Set<Target> targets) {
+        this.targets = targets;
+    }
 
     /**
      * @return the createdAt
@@ -127,7 +142,6 @@ public class Activity implements Serializable {
     private String name;
 
     @Column(name = "description", columnDefinition = "TEXT")
-    @NotNull
     private String description;
 
     @Column(name = "created_at")
@@ -148,17 +162,22 @@ public class Activity implements Serializable {
     @NotNull
     private Integer updatedBy;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-            })
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "transition_activity",
             joinColumns = {
-                @JoinColumn(name = "activity_id")},
+                @JoinColumn(name = "activity_id", referencedColumnName = "id")},
             inverseJoinColumns = {
-                @JoinColumn(name = "transition_id")})
+                @JoinColumn(name = "transition_id", referencedColumnName = "id")})
+    @JsonIgnore
     private Set<Transition> transitions = new HashSet<>();
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "activity_target",
+            joinColumns = {
+                @JoinColumn(name = "activity_id", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "target_id", referencedColumnName = "id")})
+    private Set<Target> targets = new HashSet<>();
 
     public Integer getId() {
         return this.id;

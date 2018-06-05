@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import workflow.engine.model.Action;
-import workflow.engine.model.Activity;
 import workflow.engine.model.ApiResponse;
-import workflow.engine.service.ActivityService;
+import workflow.engine.model.Transition;
+import workflow.engine.service.TransitionService;
 
 /**
  *
@@ -26,22 +25,22 @@ import workflow.engine.service.ActivityService;
  */
 @RestController
 @RequestMapping("/api/v1")
-public class ActivityController {
+public class TransitionController {
 
     @Autowired
-    ActivityService activityService;
+    TransitionService transitionService;
 
-    @PostMapping(value = "/activities", consumes = "application/json")
-    public ResponseEntity<ApiResponse> create(@Valid @RequestBody Activity activity) {
-        activity = activityService.create(activity);
-        ApiResponse apiResponse = new ApiResponse(activity);
+    @PostMapping(value = "/transitions", consumes = "application/json")
+    public ResponseEntity<ApiResponse> create(@Valid @RequestBody Transition transition) {
+        transition = transitionService.create(transition);
+        ApiResponse apiResponse = new ApiResponse(transition);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/activities/{activityId}/targets", consumes = "application/json")
-    public ResponseEntity<ApiResponse> addTargets(@PathVariable("activityId") int activityId, @Valid @RequestBody List<Integer> targetIds) {
-        Activity activity = activityService.addTargets(activityId, targetIds);
-        ApiResponse apiResponse = new ApiResponse(activity);
+    @PostMapping(value = "/transitions/{transitionId}/actions", consumes = "application/json")
+    public ResponseEntity<ApiResponse> addActions(@PathVariable("transitionId") int transitionId, @Valid @RequestBody List<Integer> actionIds) {
+        Transition transition = transitionService.addActions(transitionId, actionIds);
+        ApiResponse apiResponse = new ApiResponse(transition);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }

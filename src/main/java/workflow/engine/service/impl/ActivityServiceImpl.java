@@ -5,11 +5,14 @@
  */
 package workflow.engine.service.impl;
 
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import workflow.engine.model.Action;
 import workflow.engine.model.Activity;
+import workflow.engine.model.Target;
 import workflow.engine.service.ActivityService;
 
 /**
@@ -26,6 +29,17 @@ public class ActivityServiceImpl implements ActivityService {
     @Override
     public Activity create(Activity activity) {
         em.persist(activity);
+        return activity;
+    }
+
+    @Override
+    public Activity addTargets(int activityId, List<Integer> targetIds) {
+        Activity activity = em.find(Activity.class, activityId);
+        for (Integer targetId : targetIds) {
+            Target target = em.find(Target.class, targetId);
+            activity.getTargets().add(target);
+        }
+        em.flush();
         return activity;
     }
 

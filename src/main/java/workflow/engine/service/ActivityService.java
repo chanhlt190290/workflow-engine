@@ -5,6 +5,7 @@
  */
 package workflow.engine.service;
 
+import java.util.List;
 import workflow.engine.model.Activity;
 
 /**
@@ -14,4 +15,6 @@ import workflow.engine.model.Activity;
 public interface ActivityService {
 
     Activity create(Activity activity);
+
+    public Activity addTargets(int activityId, List<Integer> targetIds);
 }

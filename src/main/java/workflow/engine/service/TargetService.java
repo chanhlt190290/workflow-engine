@@ -5,17 +5,12 @@
  */
 package workflow.engine.service;
 
-import java.util.List;
-import workflow.engine.model.Transition;
+import workflow.engine.model.Target;
 
 /**
  *
  * @author trungchanh
  */
-public interface TransitionService {
-
-    public Transition create(Transition transition);
-
-    public Transition addActions(int transitionId, List<Integer> actionIds);
-
+public interface TargetService {
+    Target create(Target target);
 }

@@ -5,12 +5,20 @@
  */
 package workflow.engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
@@ -21,6 +29,20 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "target")
 public class Target implements Serializable {
+
+    /**
+     * @return the actions
+     */
+    public Set<Action> getActions() {
+        return actions;
+    }
+
+    /**
+     * @param actions the actions to set
+     */
+    public void setActions(Set<Action> actions) {
+        this.actions = actions;
+    }
 
     /**
      * @return the id
@@ -108,11 +130,18 @@ public class Target implements Serializable {
     private String name;
 
     @Column(name = "user_id")
-    @NotNull
     private Integer userId;
 
     @Column(name = "user_group_id")
-    @NotNull
     private Integer userGroupId;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "action_target",
+            joinColumns = {
+                @JoinColumn(name = "target_id", referencedColumnName = "id")},
+            inverseJoinColumns = {
+                @JoinColumn(name = "action_id", referencedColumnName = "id")})
+    @JsonIgnore
+    private Set<Action> actions = new HashSet<>();
 
 }

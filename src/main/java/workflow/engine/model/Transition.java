@@ -18,6 +18,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -53,17 +54,17 @@ public class Transition implements Serializable {
     private static final long serialVersionUID = 775042849188644497L;
 
     /**
-     * @return the process
+     * @return the processId
      */
-    public Integer getProcess() {
-        return process;
+    public Integer getProcessId() {
+        return processId;
     }
 
     /**
-     * @param process the process to set
+     * @param process the processId to set
      */
-    public void setProcess(Integer process) {
-        this.process = process;
+    public void setProcessId(Integer process) {
+        this.processId = process;
     }
 
     @Id
@@ -72,7 +73,8 @@ public class Transition implements Serializable {
     private Integer id;
 
     @Column(name = "process_id")
-    private Integer process;
+    @NotNull
+    private Integer processId;
 
     @JoinColumn(name = "current_state_id")
     @NotNull
@@ -100,20 +102,20 @@ public class Transition implements Serializable {
     @NotNull
     private Integer updatedBy;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-            },
-            mappedBy = "transitions")
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "transition_action",
+            inverseJoinColumns = {
+                @JoinColumn(name = "action_id", referencedColumnName = "id")},
+            joinColumns = {
+                @JoinColumn(name = "transition_id", referencedColumnName = "id")})
     private Set<Action> actions = new HashSet<>();
-    
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                CascadeType.PERSIST,
-                CascadeType.MERGE
-            },
-            mappedBy = "transitions")
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(name = "transition_activity",
+            inverseJoinColumns = {
+                @JoinColumn(name = "activity_id", referencedColumnName = "id")},
+            joinColumns = {
+                @JoinColumn(name = "transition_id", referencedColumnName = "id")})
     private Set<Activity> activities = new HashSet<>();
 
     /**
