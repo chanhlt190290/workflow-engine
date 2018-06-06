@@ -130,7 +130,6 @@ public class Request implements Serializable {
 
     @Column(name = "process_id")
     @NotNull
-    @JsonIgnore
     private Integer processId;
 
     @Column(name = "created_at")

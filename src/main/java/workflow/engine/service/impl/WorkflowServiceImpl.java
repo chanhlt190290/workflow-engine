@@ -166,9 +166,9 @@ public class WorkflowServiceImpl implements WorkflowService {
 
     private void applyRequest(Request request) {
         List<RequestAction> availableActions = getAvailableActions(request.getId());
-        for (RequestAction ra : availableActions) {
+        availableActions.forEach((ra) -> {
             doRequestAction(request.getId(), ra.getId(), request.getCreatedBy());
-        }
+        });
     }
 
 }
