@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
-import workflow.engine.model.Action;
 import workflow.engine.model.Activity;
 import workflow.engine.model.Target;
 import workflow.engine.service.ActivityService;

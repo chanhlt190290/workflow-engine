@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import workflow.engine.model.ApiResponse;
 import workflow.engine.model.State;
-import workflow.engine.model.Transition;
 import workflow.engine.service.StateService;
 
 /**

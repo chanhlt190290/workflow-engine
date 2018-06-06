@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import workflow.engine.model.Action;
 import workflow.engine.model.Activity;
 import workflow.engine.model.ApiResponse;
 import workflow.engine.service.ActivityService;
