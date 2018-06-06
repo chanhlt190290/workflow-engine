@@ -5,7 +5,6 @@
  */
 package workflow.engine.controller;
 
-import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,11 +14,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import workflow.engine.model.ApiResponse;
 import workflow.engine.model.Request;
-import workflow.engine.model.RequestAction;
 import workflow.engine.service.WorkflowService;
 
 /**
@@ -40,9 +37,9 @@ public class WorkflowController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/requests/{requestId}/actions/{actionId}", consumes = "application/json")
+    @PostMapping(value = "/requests/{requestId}/actions/{actionId}/{userId}")
     public ResponseEntity<ApiResponse> performAction(@PathVariable("requestId") int requestId,
-            @PathVariable("actionId") int actionId, @RequestParam("userId") int userId) {
+            @PathVariable("actionId") int actionId, @PathVariable("userId") int userId) {
         Request request = workflowService.doRequestAction(requestId, actionId, userId);
         ApiResponse apiResponse = new ApiResponse(request);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
@@ -55,11 +52,5 @@ public class WorkflowController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @GetMapping(value = "/requests/{requestId}/actions")
-    public ResponseEntity<ApiResponse> getAvailableActions(@PathVariable("requestId") int requestId) {
-        List<RequestAction> availableActions = workflowService.getAvailableActions(requestId);
-        ApiResponse apiResponse = new ApiResponse(availableActions);
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
-    }
 
 }

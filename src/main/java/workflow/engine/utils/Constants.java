@@ -12,6 +12,7 @@ package workflow.engine.utils;
 public class Constants {
 
     public static enum TargetType {
+        REQUESTER(0),
         USER(1),
         USER_GROUP(2);
 
@@ -25,6 +26,27 @@ public class Constants {
         private final int value;
 
         private TargetType(int type) {
+            this.value = type;
+        }
+
+    }
+
+    public static enum StateType {
+        START(1),
+        NORMAL(2),
+        COMPLETED(3),
+        CANCELLED(4);
+
+        /**
+         * @return the value
+         */
+        public int getValue() {
+            return value;
+        }
+
+        private final int value;
+
+        private StateType(int type) {
             this.value = type;
         }
 

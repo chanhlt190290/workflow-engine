@@ -127,6 +127,7 @@ public class Activity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "activity_type_id")
@@ -135,6 +136,7 @@ public class Activity implements Serializable {
 
     @Column(name = "process_id")
     @NotNull
+    @JsonIgnore
     private Integer processId;
 
     @Column(name = "name")
@@ -147,19 +149,23 @@ public class Activity implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
+    @JsonIgnore
     private Date createdAt;
 
     @Column(name = "created_by")
     @NotNull
+    @JsonIgnore
     private Integer createdBy;
 
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
+    @JsonIgnore
     private Date updatedAt;
 
     @Column(name = "updated_by")
     @NotNull
+    @JsonIgnore
     private Integer updatedBy;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)

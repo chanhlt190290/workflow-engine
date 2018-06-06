@@ -119,6 +119,7 @@ public class Target implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "target_type_id")

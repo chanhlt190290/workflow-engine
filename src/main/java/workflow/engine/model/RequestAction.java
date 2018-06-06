@@ -5,14 +5,17 @@
  */
 package workflow.engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.validation.constraints.NotNull;
@@ -24,6 +27,20 @@ import javax.validation.constraints.NotNull;
 @Entity
 @Table(name = "request_action")
 public class RequestAction implements Serializable {
+
+    /**
+     * @return the action
+     */
+    public Action getAction() {
+        return action;
+    }
+
+    /**
+     * @param action the action to set
+     */
+    public void setAction(Action action) {
+        this.action = action;
+    }
 
     /**
      * @return the completedAt
@@ -88,33 +105,40 @@ public class RequestAction implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @JoinColumn(name = "request_id")
+    @Column(name = "request_id")
     @NotNull
+    @JsonIgnore
     private Integer requestId;
 
-    @JoinColumn(name = "transition_id")
+    @Column(name = "transition_id")
     @NotNull
+    @JsonIgnore
     private Integer transitionId;
 
-    @Column(name = "action_id")
-    @NotNull
-    private Integer actionId;
-
     @Column(name = "completed_by")
+    @JsonIgnore
     private Integer completedBy;
 
     @Column(name = "completed_at")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @JsonIgnore
     private Date completedAt;
 
     @Column(name = "is_active")
     @NotNull
+    @JsonIgnore
     private Boolean isActive = true;
 
     @Column(name = "is_complete")
     @NotNull
+    @JsonIgnore
     private Boolean isComplete = false;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "action_id")
+    @NotNull
+    private Action action;
+    
     /**
      * @return the id
      */
@@ -155,20 +179,6 @@ public class RequestAction implements Serializable {
      */
     public void setTransitionId(Integer transitionId) {
         this.transitionId = transitionId;
-    }
-
-    /**
-     * @return the actionId
-     */
-    public Integer getActionId() {
-        return actionId;
-    }
-
-    /**
-     * @param actionId the actionId to set
-     */
-    public void setActionId(Integer actionId) {
-        this.actionId = actionId;
     }
 
 }

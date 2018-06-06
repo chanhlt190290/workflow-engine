@@ -5,6 +5,7 @@
  */
 package workflow.engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
@@ -98,14 +99,17 @@ public class State implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
+    @JsonIgnore
     private Integer id;
 
     @Column(name = "state_type_id")
     @NotNull
+    @JsonIgnore
     private Integer stateTypeId;
 
     @Column(name = "process_id")
     @NotNull
+    @JsonIgnore
     private Integer processId;
 
     @Column(name = "name")
@@ -118,19 +122,23 @@ public class State implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @CreatedDate
+    @JsonIgnore
     private Date createdAt;
 
     @Column(name = "created_by")
     @NotNull
+    @JsonIgnore
     private Integer createdBy;
 
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
     @LastModifiedDate
+    @JsonIgnore
     private Date updatedAt;
 
     @Column(name = "updated_by")
     @NotNull
+    @JsonIgnore
     private Integer updatedBy;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -139,6 +147,7 @@ public class State implements Serializable {
                 @JoinColumn(name = "activity_id", referencedColumnName = "id")},
             joinColumns = {
                 @JoinColumn(name = "state_id", referencedColumnName = "id")})
+    @JsonIgnore
     private Set<Activity> activities = new HashSet<>();
 
     /**

@@ -5,9 +5,7 @@
  */
 package workflow.engine.service;
 
-import java.util.List;
 import workflow.engine.model.Request;
-import workflow.engine.model.RequestAction;
 
 /**
  *
@@ -20,7 +18,5 @@ public interface WorkflowService {
     Request doRequestAction(int requestId, int actionId, int userId);
 
     Request getRequest(int requestId);
-    
-    List<RequestAction> getAvailableActions(int requestId);
 
 }

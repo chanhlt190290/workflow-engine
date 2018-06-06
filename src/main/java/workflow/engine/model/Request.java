@@ -5,15 +5,26 @@
  */
 package workflow.engine.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EntityListeners;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,6 +38,48 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "request")
 @EntityListeners(AuditingEntityListener.class)
 public class Request implements Serializable {
+
+    /**
+     * @return the activities
+     */
+    public Set<Activity> getActivities() {
+        return activities;
+    }
+
+    /**
+     * @param activities the activities to set
+     */
+    public void setActivities(Set<Activity> activities) {
+        this.activities = activities;
+    }
+
+    /**
+     * @return the state
+     */
+    public State getState() {
+        return state;
+    }
+
+    /**
+     * @param state the state to set
+     */
+    public void setState(State state) {
+        this.state = state;
+    }
+
+    /**
+     * @return the availableActions
+     */
+    public List<RequestAction> getAvailableActions() {
+        return availableActions;
+    }
+
+    /**
+     * @param availableActions the availableActions to set
+     */
+    public void setAvailableActions(List<RequestAction> availableActions) {
+        this.availableActions = availableActions;
+    }
 
     /**
      * @return the processId
@@ -59,8 +112,8 @@ public class Request implements Serializable {
     }
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    @NotNull
     private Integer id;
 
     @Column(name = "title")
@@ -68,10 +121,16 @@ public class Request implements Serializable {
     private String title;
 
     @Column(name = "state_id")
+    @JsonIgnore
     private Integer stateId;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "state_id", insertable = false, updatable = false)
+    private State state;
 
     @Column(name = "process_id")
     @NotNull
+    @JsonIgnore
     private Integer processId;
 
     @Column(name = "created_at")
@@ -89,8 +148,13 @@ public class Request implements Serializable {
     private Date updatedAt;
 
     @Column(name = "updated_by")
-    @NotNull
     private Integer updatedBy;
+
+    @Transient
+    private List<RequestAction> availableActions = new ArrayList<>();
+
+    @Transient
+    private Set<Activity> activities = new HashSet<>();
 
     /**
      * @return the id
