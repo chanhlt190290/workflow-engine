@@ -1,0 +1,1369 @@
+swagger: '2.0'
+info:
+  version: 1.0.0
+  title: Workflow API
+  description: Workflow API specification
+host: 'localhost:8081'
+basePath: /api/v1
+schemes:
+  - http
+paths:
+  /processes:
+    get:
+      tags:
+        - ProcessController
+      summary: Get all processes
+      description: Get all processes
+      operationId: getProcesses
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Process'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+    post:
+      tags:
+        - ProcessController
+      summary: Add new process
+      description: Add new process
+      operationId: addProcess
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: process
+          required: true
+          description: The process to create.
+          schema:
+            $ref: '#/definitions/ProcessToCreate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Process'
+        '400':
+          description: Invalid input
+        '500':
+          description: Unknown error
+  '/processes/{processId}/states':
+    get:
+      tags:
+        - ProcessController
+      summary: Get all states of a process
+      description: Get all states of a process
+      operationId: getStates
+      produces:
+        - application/json
+      parameters:
+        - name: processId
+          in: path
+          required: true
+          description: process id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/State'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  '/processes/{processId}':
+    get:
+      tags:
+        - ProcessController
+      summary: Get process detail
+      description: Get process detail
+      operationId: getProcess
+      produces:
+        - application/json
+      parameters:
+        - name: processId
+          in: path
+          required: true
+          description: process id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Process'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+    put:
+      tags:
+        - ProcessController
+      summary: Update process
+      description: Update process
+      operationId: updateProcess
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - name: processId
+          in: path
+          required: true
+          description: process id
+          type: integer
+        - in: body
+          name: process
+          required: true
+          description: The process to create.
+          schema:
+            $ref: '#/definitions/ProcessToUpdate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Process'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  '/processes/{processId}/transitions':
+    get:
+      tags:
+        - ProcessController
+      summary: Get all transitions of a process
+      description: Get all transitions of a process
+      operationId: getTransitions
+      produces:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: processId
+          in: path
+          required: true
+          description: process id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Transition'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  '/states/{stateId}/activities':
+    get:
+      tags:
+        - StateController
+      summary: Get all activities of a state
+      description: Get all activities of a state
+      operationId: getStateActivities
+      produces:
+        - application/json
+      parameters:
+        - name: stateId
+          in: path
+          required: true
+          description: state id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Activity'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  '/states/{stateId}':
+    get:
+      tags:
+        - StateController
+      summary: Get state detail
+      description: Get state detail
+      operationId: getState
+      produces:
+        - application/json
+      parameters:
+        - name: stateId
+          in: path
+          required: true
+          description: state id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/State'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+    put:
+      tags:
+        - StateController
+      summary: Update state
+      description: Update state
+      operationId: updateState
+      produces:
+        - application/json
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: stateId
+          in: path
+          required: true
+          description: state id
+          type: integer
+        - in: body
+          name: state
+          description: The state used to update.
+          schema:
+            $ref: '#/definitions/StateToUpdate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/State'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  /states:
+    post:
+      tags:
+        - StateController
+      summary: Add new state
+      description: Add new state
+      operationId: addState
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: state
+          required: true
+          description: The state to create.
+          schema:
+            $ref: '#/definitions/StateToCreate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/State'
+        '400':
+          description: Invalid input
+        '500':
+          description: Unknown error
+  '/transitions/{transitionId}/activities':
+    get:
+      tags:
+        - TransitionController
+      summary: Get all activities of a transition
+      description: Get all activities of a transition
+      operationId: getTransitionActivities
+      produces:
+        - application/json
+      parameters:
+        - name: transitionId
+          in: path
+          required: true
+          description: transition id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Activity'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  '/transitions/{transitionId}/actions':
+    get:
+      tags:
+        - TransitionController
+      summary: Get all actions of a transition
+      description: Get all actions of a transition
+      operationId: getTransitionActions
+      produces:
+        - application/json
+      parameters:
+        - name: transitionId
+          in: path
+          required: true
+          description: transition id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Action'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  '/transitions/{transitionId}':
+    get:
+      tags:
+        - TransitionController
+      summary: Get transition detail
+      description: Get transition detail
+      operationId: getTransition
+      produces:
+        - application/json
+      parameters:
+        - name: transitionId
+          in: path
+          required: true
+          description: transition id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Transition'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+    put:
+      tags:
+        - TransitionController
+      summary: Update transition
+      description: Update transition
+      operationId: updateTransition
+      produces:
+        - application/json
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: transitionId
+          in: path
+          required: true
+          description: transition id
+          type: integer
+        - in: body
+          name: transition
+          description: The transition used to update.
+          schema:
+            $ref: '#/definitions/TransitionToUpdate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Transition'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  /transitions:
+    post:
+      tags:
+        - TransitionController
+      summary: Add new transition
+      description: Add new transition
+      operationId: addTransition
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: transition
+          required: true
+          description: The transition to create.
+          schema:
+            $ref: '#/definitions/TransitionToCreate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Transition'
+        '400':
+          description: Invalid input
+        '500':
+          description: Unknown error
+  '/activities/{activityId}':
+    get:
+      tags:
+        - ActivityController
+      summary: Get activity detail
+      description: Get activity detail
+      operationId: getActivity
+      produces:
+        - application/json
+      parameters:
+        - name: activityId
+          in: path
+          required: true
+          description: activity id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Activity'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+    put:
+      tags:
+        - ActivityController
+      summary: Update activity
+      description: Update activity
+      operationId: updateActivity
+      produces:
+        - application/json
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: activityId
+          in: path
+          required: true
+          description: activity id
+          type: integer
+        - in: body
+          name: activity
+          description: The activity used to update.
+          schema:
+            $ref: '#/definitions/ActivityToUpdate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Activity'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  /activities:
+    post:
+      tags:
+        - ActivityController
+      summary: Add new activity
+      description: Add new activity
+      operationId: addActivity
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: activity
+          required: true
+          description: The activity to create.
+          schema:
+            $ref: '#/definitions/ActivityToCreate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Activity'
+        '400':
+          description: Invalid input
+        '500':
+          description: Unknown error
+  '/activities/{activityId}/targets':
+    get:
+      tags:
+        - ActivityController
+      summary: Get all targets of an activity
+      description: Get all targets of an activity
+      operationId: getActivityTargets
+      produces:
+        - application/json
+      parameters:
+        - name: activityId
+          in: path
+          required: true
+          description: activity id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Target'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+    post:
+      tags:
+        - ActivityController
+      summary: Add targets for an activity
+      description: Add targets for an activity
+      operationId: addActivityTargets
+      produces:
+        - application/json
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: activityId
+          in: path
+          required: true
+          description: activity id
+          type: integer
+        - in: body
+          name: targetIds
+          required: true
+          description: The list of targetId used to add.
+          schema:
+            $ref: '#/definitions/TargetIds'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Target'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  '/actions/{actionId}':
+    get:
+      tags:
+        - ActionController
+      summary: Get action detail
+      description: Get action detail
+      operationId: getAction
+      produces:
+        - application/json
+      parameters:
+        - name: actionId
+          in: path
+          required: true
+          description: action id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Action'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+    put:
+      tags:
+        - ActionController
+      summary: Update action
+      description: Update action
+      operationId: updateAction
+      produces:
+        - application/json
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: actionId
+          in: path
+          required: true
+          description: action id
+          type: integer
+        - in: body
+          name: action
+          description: The action used to update.
+          schema:
+            $ref: '#/definitions/ActionToUpdate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Action'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  /actions:
+    post:
+      tags:
+        - ActionController
+      summary: Add new action
+      description: Add new action
+      operationId: addAction
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: action
+          required: true
+          description: The action to create.
+          schema:
+            $ref: '#/definitions/ActionToCreate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Action'
+        '400':
+          description: Invalid input
+        '500':
+          description: Unknown error
+  '/actions/{actionId}/targets':
+    get:
+      tags:
+        - ActionController
+      summary: Get all targets of an action
+      description: Get all targets of an action
+      operationId: getActionTargets
+      produces:
+        - application/json
+      parameters:
+        - name: actionId
+          in: path
+          required: true
+          description: action id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Target'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+    post:
+      tags:
+        - ActionController
+      summary: Add targets for an action
+      description: Add targets for an action
+      operationId: addActionTargets
+      produces:
+        - application/json
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: actionId
+          in: path
+          required: true
+          description: action id
+          type: integer
+        - in: body
+          name: targetIds
+          required: true
+          description: The list of targetId used to add.
+          schema:
+            $ref: '#/definitions/TargetIds'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Target'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  '/target/{targetId}':
+    get:
+      tags:
+        - TargetController
+      summary: Get target detail
+      description: Get target detail
+      operationId: getTarget
+      produces:
+        - application/json
+      parameters:
+        - name: targetId
+          in: path
+          required: true
+          description: target id
+          type: integer
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Target'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+    put:
+      tags:
+        - TargetController
+      summary: Update target
+      description: Update target
+      operationId: updateTarget
+      produces:
+        - application/json
+      consumes:
+        - application/x-www-form-urlencoded
+      parameters:
+        - name: targetId
+          in: path
+          required: true
+          description: target id
+          type: integer
+        - in: body
+          name: target
+          description: The target used to update.
+          schema:
+            $ref: '#/definitions/TargetToUpdate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Target'
+        '400':
+          description: Invalid input
+        '404':
+          description: Not found
+        '500':
+          description: Unknown error
+  /targets:
+    get:
+      tags:
+        - TargetController
+      summary: Get all targets
+      description: Get all targets
+      operationId: getTargets
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                type: array
+                items:
+                  $ref: '#/definitions/Target'
+        '400':
+          description: Invalid input
+        '500':
+          description: Unknown error
+    post:
+      tags:
+        - TargetController
+      summary: Add new target
+      description: Add new target
+      operationId: addTarget
+      consumes:
+        - application/x-www-form-urlencoded
+      produces:
+        - application/json
+      parameters:
+        - in: body
+          name: target
+          required: true
+          description: The target to create.
+          schema:
+            $ref: '#/definitions/TargetToCreate'
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: object
+            properties:
+              code:
+                type: number
+                example: 200
+              message:
+                type: string
+              data:
+                $ref: '#/definitions/Target'
+        '400':
+          description: Invalid input
+        '500':
+          description: Unknown error
+definitions:
+  State:
+    type: object
+    properties:
+      id:
+        type: number
+      processId:
+        type: number
+      name:
+        type: string
+      description:
+        type: string
+      createdBy:
+        type: number
+      createdAt:
+        type: string
+        format: date
+      updatedBy:
+        type: number
+      updatedAt:
+        type: string
+        format: date
+  Process:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: string
+      description:
+        type: string
+      createdBy:
+        type: number
+      createdAt:
+        type: string
+        format: date
+      updatedBy:
+        type: number
+      updatedAt:
+        type: string
+        format: date
+  Transition:
+    type: object
+    properties:
+      id:
+        type: number
+      processId:
+        type: number
+      currentStateId:
+        type: number
+      nextStateId:
+        type: number
+      name:
+        type: string
+      description:
+        type: string
+      createdBy:
+        type: number
+      createdAt:
+        type: string
+        format: date
+      updatedBy:
+        type: number
+      updatedAt:
+        type: string
+        format: date
+  Activity:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: number
+      description:
+        type: string
+      createdBy:
+        type: number
+      createdAt:
+        type: string
+        format: date
+      updatedBy:
+        type: number
+      updatedAt:
+        type: string
+        format: date
+  Action:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: number
+      description:
+        type: string
+      createdBy:
+        type: number
+      createdAt:
+        type: string
+        format: date
+      updatedBy:
+        type: number
+      updatedAt:
+        type: string
+        format: date
+  Target:
+    type: object
+    properties:
+      id:
+        type: number
+      name:
+        type: number
+      targetTypeId:
+        type: number
+      description:
+        type: string
+      createdBy:
+        type: number
+      createdAt:
+        type: string
+        format: date
+      updatedBy:
+        type: number
+      updatedAt:
+        type: string
+        format: date
+  ProcessToCreate:
+    type: object
+    required:
+      - name
+      - createdBy
+    properties:
+      name:
+        type: string
+      createdBy:
+        type: number
+      description:
+        type: string
+  ProcessToUpdate:
+    type: object
+    required:
+      - updatedBy
+    properties:
+      name:
+        type: string
+      updatedBy:
+        type: number
+      description:
+        type: string
+  StateToUpdate:
+    type: object
+    required:
+      - updatedBy
+    properties:
+      updatedBy:
+        type: number
+      name:
+        type: string
+      stateTypeId:
+        type: number
+      description:
+        type: string
+  StateToCreate:
+    type: object
+    required:
+      - name
+      - processId
+      - createdBy
+      - stateTypeId
+    properties:
+      name:
+        type: string
+      processId:
+        type: number
+      createdBy:
+        type: number
+      stateTypeId:
+        type: number
+      description:
+        type: string
+  TransitionToUpdate:
+    type: object
+    required:
+      - updatedBy
+    properties:
+      updatedBy:
+        type: number
+      currentStateId:
+        type: number
+      nextStateId:
+        type: number
+      description:
+        type: string
+  TransitionToCreate:
+    type: object
+    required:
+      - processId
+      - createdBy
+      - currentStateId
+      - nextStateId
+    properties:
+      processId:
+        type: number
+      createdBy:
+        type: number
+      currentStateId:
+        type: number
+      nextStateId:
+        type: number
+      description:
+        type: string
+  ActivityToUpdate:
+    type: object
+    required:
+      - updatedBy
+    properties:
+      updatedBy:
+        type: number
+      name:
+        type: string
+      activityTypeId:
+        type: number
+      description:
+        type: string
+  ActivityToCreate:
+    type: object
+    required:
+      - processId
+      - createdBy
+      - name
+      - activityTypeId
+    properties:
+      processId:
+        type: number
+      createdBy:
+        type: number
+      name:
+        type: string
+      activityTypeId:
+        type: number
+      description:
+        type: string
+  TargetIds:
+    type: array
+    items:
+      type: number
+      format: int64
+  ActionToUpdate:
+    type: object
+    required:
+      - updatedBy
+    properties:
+      updatedBy:
+        type: number
+      name:
+        type: string
+      actionTypeId:
+        type: number
+      description:
+        type: string
+  ActionToCreate:
+    type: object
+    required:
+      - processId
+      - createdBy
+      - name
+      - actionTypeId
+    properties:
+      processId:
+        type: number
+      createdBy:
+        type: number
+      name:
+        type: string
+      actionTypeId:
+        type: number
+      description:
+        type: string
+  TargetToUpdate:
+    type: object
+    required:
+      - updatedBy
+    properties:
+      updatedBy:
+        type: number
+      name:
+        type: string
+      targetTypeId:
+        type: number
+      description:
+        type: string
+  TargetToCreate:
+    type: object
+    required:
+      - createdBy
+      - name
+      - targetTypeId
+    properties:
+      processId:
+        type: number
+      createdBy:
+        type: number
+      name:
+        type: string
+      targetTypeId:
+        type: number
+      description:
+        type: string
+        

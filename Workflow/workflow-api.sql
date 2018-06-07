@@ -23,15 +23,15 @@ DROP TABLE IF EXISTS `action`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `action` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  `action_type_id` int(11) NOT NULL,
-  `process_id` int(11) NOT NULL,
+  `action_type_id` bigint(20) NOT NULL,
+  `process_id` bigint(20) NOT NULL,
   `description` varchar(255) DEFAULT NULL,
   `created_at` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
+  `created_by` bigint(20) NOT NULL,
   `updated_at` datetime NOT NULL,
-  `updated_by` int(11) NOT NULL,
+  `updated_by` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_action_action_type1_idx` (`action_type_id`),
   KEY `fk_action_process1_idx` (`process_id`),
@@ -58,8 +58,8 @@ DROP TABLE IF EXISTS `action_target`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `action_target` (
-  `action_id` int(11) NOT NULL,
-  `target_id` int(11) NOT NULL,
+  `action_id` bigint(20) NOT NULL,
+  `target_id` bigint(20) NOT NULL,
   PRIMARY KEY (`action_id`,`target_id`),
   KEY `fk_action_target_action1_idx` (`action_id`),
   KEY `fk_action_target_target1_idx` (`target_id`),
@@ -74,7 +74,7 @@ CREATE TABLE `action_target` (
 
 LOCK TABLES `action_target` WRITE;
 /*!40000 ALTER TABLE `action_target` DISABLE KEYS */;
-INSERT INTO `action_target` VALUES (1,1),(2,2),(3,2),(4,3),(5,3),(6,2),(7,4),(8,4),(9,5),(10,5),(11,1),(12,1);
+INSERT INTO `action_target` VALUES (1,1),(2,2),(3,2),(4,3),(5,3),(6,4),(7,4),(8,3),(9,5),(10,5),(11,1),(12,1);
 /*!40000 ALTER TABLE `action_target` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -86,7 +86,7 @@ DROP TABLE IF EXISTS `action_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `action_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
@@ -110,15 +110,15 @@ DROP TABLE IF EXISTS `activity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
-  `activity_type_id` int(11) NOT NULL,
-  `process_id` int(11) NOT NULL,
+  `activity_type_id` bigint(20) NOT NULL,
+  `process_id` bigint(20) NOT NULL,
   `description` text,
   `created_at` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
+  `created_by` bigint(20) NOT NULL,
   `updated_at` datetime NOT NULL,
-  `updated_by` int(11) NOT NULL,
+  `updated_by` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_activity_activity_type1_idx` (`activity_type_id`),
   KEY `fk_activity_process1_idx` (`process_id`),
@@ -145,8 +145,8 @@ DROP TABLE IF EXISTS `activity_target`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity_target` (
-  `activity_id` int(11) NOT NULL,
-  `target_id` int(11) NOT NULL,
+  `activity_id` bigint(20) NOT NULL,
+  `target_id` bigint(20) NOT NULL,
   PRIMARY KEY (`activity_id`,`target_id`),
   KEY `fk_activity_target_activity1_idx` (`activity_id`),
   KEY `fk_activity_target_target1_idx` (`target_id`),
@@ -173,7 +173,7 @@ DROP TABLE IF EXISTS `activity_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `activity_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
@@ -197,14 +197,15 @@ DROP TABLE IF EXISTS `process`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `process` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
+  `created_by` bigint(20) NOT NULL,
   `updated_at` datetime NOT NULL,
-  `updated_by` int(11) NOT NULL,
+  `updated_by` bigint(20) NOT NULL,
+  `description` text,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -213,7 +214,7 @@ CREATE TABLE `process` (
 
 LOCK TABLES `process` WRITE;
 /*!40000 ALTER TABLE `process` DISABLE KEYS */;
-INSERT INTO `process` VALUES (1,'Request to start a project','2018-06-05 13:28:59',1,'2018-06-05 13:28:59',1);
+INSERT INTO `process` VALUES (1,'Request to start a project','2018-06-05 13:28:59',1,'2018-06-05 13:28:59',1,NULL),(2,'process 02','2018-06-07 09:27:38',1,'2018-06-07 09:27:38',1,NULL),(3,'process 01','2018-06-07 09:28:52',1,'2018-06-07 09:28:52',1,NULL),(4,'process 01','2018-06-07 12:06:19',1,'2018-06-07 12:06:19',1,NULL),(5,'process 01','2018-06-07 12:06:22',1,'2018-06-07 12:06:22',1,NULL),(6,'process 01','2018-06-07 12:06:37',1,'2018-06-07 12:06:37',1,NULL),(7,'process 01','2018-06-07 12:06:49',1,'2018-06-07 12:06:49',1,NULL),(8,'Process for requesting to change contract price','2018-06-07 17:05:45',123,'2018-06-07 17:05:45',123,NULL),(9,'Process for requesting to change contract price','2018-06-07 17:07:04',111,'2018-06-07 17:07:04',111,NULL),(10,'Update process','2018-06-07 17:08:21',111,'2018-06-07 18:30:10',100,'Nothing'),(11,'Process for requesting to change contract price','2018-06-07 18:03:08',123,'2018-06-07 18:03:08',123,'This is description'),(12,'Process for requesting to change contract price','2018-06-07 18:28:58',123,'2018-06-07 18:28:58',123,'This is description');
 /*!40000 ALTER TABLE `process` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -225,20 +226,21 @@ DROP TABLE IF EXISTS `request`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `request` (
-  `id` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `title` varchar(100) NOT NULL,
-  `state_id` int(11) NOT NULL,
-  `process_id` int(11) NOT NULL,
+  `state_id` bigint(20) NOT NULL,
+  `process_id` bigint(20) NOT NULL,
   `created_at` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
+  `created_by` bigint(20) NOT NULL,
   `updated_at` datetime NOT NULL,
-  `updated_by` int(11) NOT NULL,
+  `updated_by` bigint(20) NOT NULL,
+  `description` text,
   PRIMARY KEY (`id`),
   KEY `fk_request_process1_idx` (`process_id`),
   KEY `fk_request_state1_idx` (`state_id`),
   CONSTRAINT `fk_request_process1` FOREIGN KEY (`process_id`) REFERENCES `process` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_request_state1` FOREIGN KEY (`state_id`) REFERENCES `state` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -247,6 +249,7 @@ CREATE TABLE `request` (
 
 LOCK TABLES `request` WRITE;
 /*!40000 ALTER TABLE `request` DISABLE KEYS */;
+INSERT INTO `request` VALUES (1,'Request to change delivery date',1,1,'2018-06-06 12:08:48',1,'2018-06-06 12:08:48',1,NULL),(2,'Request to change delivery date',2,1,'2018-06-06 12:10:50',1,'2018-06-06 12:10:50',1,NULL),(3,'Request to change delivery date',2,1,'2018-06-06 12:13:30',1,'2018-06-06 12:13:30',1,NULL),(4,'Request to change delivery date',2,1,'2018-06-06 12:19:39',1,'2018-06-06 12:19:39',1,NULL),(5,'Request to change delivery date',2,1,'2018-06-06 12:20:20',1,'2018-06-06 12:20:20',1,NULL),(6,'Request to change delivery date',2,1,'2018-06-06 12:20:56',1,'2018-06-06 12:20:56',1,NULL),(7,'Request to change delivery date',8,1,'2018-06-06 12:37:34',1,'2018-06-06 13:32:10',1,NULL),(8,'Request to change delivery date',2,1,'2018-06-06 15:21:27',1,'2018-06-06 15:21:27',1,NULL),(9,'Request to change delivery date',2,1,'2018-06-06 15:23:52',1,'2018-06-06 15:23:52',1,NULL),(10,'Request to change delivery date',2,1,'2018-06-06 15:24:06',1,'2018-06-06 15:24:06',1,NULL),(11,'Request to change delivery date',2,1,'2018-06-06 15:24:51',1,'2018-06-06 15:24:51',1,NULL),(12,'Request to change delivery date',2,1,'2018-06-06 15:25:29',1,'2018-06-06 15:25:29',1,NULL),(13,'Request to change delivery date',2,1,'2018-06-06 15:26:09',1,'2018-06-06 15:26:09',1,NULL),(14,'Request to change delivery date',2,1,'2018-06-06 15:27:10',1,'2018-06-06 15:27:10',1,NULL),(15,'Request to change delivery date',2,1,'2018-06-06 15:28:28',1,'2018-06-06 15:28:28',1,NULL),(16,'Request to change delivery date',2,1,'2018-06-06 15:29:11',1,'2018-06-06 15:29:12',1,NULL),(17,'Request to change delivery date',2,1,'2018-06-06 15:30:00',1,'2018-06-06 15:30:00',1,NULL),(18,'Request to change delivery date',2,1,'2018-06-06 15:30:11',1,'2018-06-06 15:30:11',1,NULL),(19,'Request to change delivery date',2,1,'2018-06-06 15:31:32',1,'2018-06-06 15:31:32',1,NULL),(20,'Request to change delivery date',8,1,'2018-06-06 15:32:36',1,'2018-06-06 15:43:01',1,NULL),(21,'Request to change delivery date',5,1,'2018-06-06 15:47:09',1,'2018-06-06 16:24:10',1,NULL),(22,'Request to change delivery date',4,1,'2018-06-06 16:34:07',1,'2018-06-06 16:36:55',3,NULL),(23,'Request to change delivery date',2,1,'2018-06-06 18:57:28',1,'2018-06-06 18:57:28',1,NULL),(24,'Request to change delivery date',2,1,'2018-06-06 18:58:32',1,'2018-06-06 18:58:32',1,NULL);
 /*!40000 ALTER TABLE `request` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -258,22 +261,22 @@ DROP TABLE IF EXISTS `request_action`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `request_action` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `is_complete` tinyint(1) NOT NULL DEFAULT '0',
-  `request_id` int(11) NOT NULL,
-  `transition_id` int(11) NOT NULL,
-  `action_id` int(11) NOT NULL,
+  `request_id` bigint(20) NOT NULL,
+  `transition_id` bigint(20) NOT NULL,
+  `action_id` bigint(20) NOT NULL,
   `completed_at` datetime DEFAULT NULL,
-  `completed_by` int(11) DEFAULT NULL,
+  `completed_by` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_request_action_request1_idx` (`request_id`),
   KEY `fk_request_action_transition1_idx` (`transition_id`),
   KEY `fk_request_action_action1_idx` (`action_id`),
   CONSTRAINT `fk_request_action_action1` FOREIGN KEY (`action_id`) REFERENCES `action` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_request_action_request1` FOREIGN KEY (`request_id`) REFERENCES `request` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_request_action_transition1` FOREIGN KEY (`transition_id`) REFERENCES `transition` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+  CONSTRAINT `fk_request_action_transition1` FOREIGN KEY (`transition_id`) REFERENCES `transition` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `request_action_request_fk` FOREIGN KEY (`request_id`) REFERENCES `request` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=133 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -282,6 +285,7 @@ CREATE TABLE `request_action` (
 
 LOCK TABLES `request_action` WRITE;
 /*!40000 ALTER TABLE `request_action` DISABLE KEYS */;
+INSERT INTO `request_action` VALUES (2,1,0,1,1,1,NULL,NULL),(3,0,1,2,1,1,NULL,1),(4,1,0,2,2,3,NULL,NULL),(5,1,0,2,3,2,NULL,NULL),(6,0,1,3,1,1,'2018-06-06 12:13:30',1),(7,1,0,3,2,3,NULL,NULL),(8,1,0,3,3,2,NULL,NULL),(9,0,1,4,1,1,'2018-06-06 12:19:39',1),(10,1,0,4,2,3,NULL,NULL),(11,1,0,4,3,2,NULL,NULL),(12,0,1,5,1,1,'2018-06-06 12:20:20',1),(13,1,0,5,2,3,NULL,NULL),(14,1,0,5,3,2,NULL,NULL),(15,0,1,6,1,1,'2018-06-06 12:20:56',1),(16,1,0,6,2,3,NULL,NULL),(17,1,0,6,3,2,NULL,NULL),(18,0,1,7,1,1,'2018-06-06 12:37:34',1),(19,0,1,7,2,3,'2018-06-06 12:50:23',2),(20,0,0,7,3,2,NULL,NULL),(21,0,1,7,1,1,'2018-06-06 12:51:15',1),(22,0,0,7,2,3,NULL,NULL),(23,0,1,7,3,2,'2018-06-06 12:53:08',2),(24,0,1,7,4,5,'2018-06-06 12:54:17',3),(25,0,0,7,5,4,NULL,NULL),(26,0,1,7,1,1,'2018-06-06 13:28:16',3),(27,0,0,7,2,3,NULL,NULL),(28,0,1,7,3,2,'2018-06-06 13:28:25',3),(29,0,0,7,4,5,NULL,NULL),(30,0,1,7,5,4,'2018-06-06 13:30:08',3),(31,0,0,7,6,7,NULL,NULL),(32,0,1,7,7,6,'2018-06-06 13:31:08',3),(33,0,1,7,8,8,'2018-06-06 13:31:23',3),(34,0,1,7,9,10,'2018-06-06 13:31:35',3),(35,0,0,7,10,9,NULL,NULL),(36,0,1,7,8,8,'2018-06-06 13:31:45',3),(37,0,0,7,9,10,NULL,NULL),(38,0,1,7,10,9,'2018-06-06 13:31:57',3),(39,0,0,7,11,12,NULL,NULL),(40,0,1,7,12,11,'2018-06-06 13:32:10',3),(41,0,1,8,1,1,'2018-06-06 15:21:27',1),(42,1,0,8,2,3,NULL,NULL),(43,1,0,8,3,2,NULL,NULL),(44,0,1,9,1,1,'2018-06-06 15:23:52',1),(45,1,0,9,2,3,NULL,NULL),(46,1,0,9,3,2,NULL,NULL),(47,0,1,10,1,1,'2018-06-06 15:24:06',1),(48,1,0,10,2,3,NULL,NULL),(49,1,0,10,3,2,NULL,NULL),(50,0,1,11,1,1,'2018-06-06 15:24:51',1),(51,1,0,11,2,3,NULL,NULL),(52,1,0,11,3,2,NULL,NULL),(53,0,1,12,1,1,'2018-06-06 15:25:29',1),(54,1,0,12,2,3,NULL,NULL),(55,1,0,12,3,2,NULL,NULL),(56,0,1,13,1,1,'2018-06-06 15:26:09',1),(57,1,0,13,2,3,NULL,NULL),(58,1,0,13,3,2,NULL,NULL),(59,0,1,14,1,1,'2018-06-06 15:27:10',1),(60,1,0,14,2,3,NULL,NULL),(61,1,0,14,3,2,NULL,NULL),(62,0,1,15,1,1,'2018-06-06 15:28:28',1),(63,1,0,15,2,3,NULL,NULL),(64,1,0,15,3,2,NULL,NULL),(65,0,1,16,1,1,'2018-06-06 15:29:12',1),(66,1,0,16,2,3,NULL,NULL),(67,1,0,16,3,2,NULL,NULL),(68,0,1,17,1,1,'2018-06-06 15:30:00',1),(69,1,0,17,2,3,NULL,NULL),(70,1,0,17,3,2,NULL,NULL),(71,0,1,18,1,1,'2018-06-06 15:30:11',1),(72,1,0,18,2,3,NULL,NULL),(73,1,0,18,3,2,NULL,NULL),(74,0,1,19,1,1,'2018-06-06 15:31:32',1),(75,1,0,19,2,3,NULL,NULL),(76,1,0,19,3,2,NULL,NULL),(77,0,1,20,1,1,'2018-06-06 15:32:36',1),(78,0,1,20,2,3,'2018-06-06 15:34:01',2),(79,0,0,20,3,2,NULL,NULL),(80,0,1,20,1,1,'2018-06-06 15:37:44',1),(81,0,0,20,2,3,NULL,NULL),(82,0,1,20,3,2,'2018-06-06 15:37:53',2),(83,0,0,20,4,5,NULL,NULL),(84,0,1,20,5,4,'2018-06-06 15:38:29',3),(85,0,1,20,6,7,'2018-06-06 15:41:29',3),(86,0,0,20,7,6,NULL,NULL),(87,0,1,20,1,1,'2018-06-06 15:41:41',3),(88,0,0,20,2,3,NULL,NULL),(89,0,1,20,3,2,'2018-06-06 15:41:57',2),(90,0,0,20,4,5,NULL,NULL),(91,0,1,20,5,4,'2018-06-06 15:42:08',3),(92,0,0,20,6,7,NULL,NULL),(93,0,1,20,7,6,'2018-06-06 15:42:19',4),(94,0,1,20,8,8,'2018-06-06 15:42:34',3),(95,0,0,20,9,10,NULL,NULL),(96,0,1,20,10,9,'2018-06-06 15:42:50',5),(97,0,0,20,11,12,NULL,NULL),(98,0,1,20,12,11,'2018-06-06 15:43:01',1),(99,0,1,21,1,1,'2018-06-06 15:47:09',1),(100,0,0,21,2,3,NULL,NULL),(101,0,1,21,3,2,'2018-06-06 16:03:04',2),(102,0,0,21,4,5,NULL,NULL),(103,0,1,21,5,4,'2018-06-06 16:05:41',3),(104,0,0,21,6,7,NULL,NULL),(105,0,1,21,7,6,'2018-06-06 16:08:04',4),(106,0,1,21,8,8,'2018-06-06 16:19:56',3),(115,0,0,21,9,10,NULL,NULL),(116,0,1,21,10,9,'2018-06-06 16:20:19',5),(117,0,1,21,11,12,'2018-06-06 16:24:10',1),(118,0,0,21,12,11,NULL,NULL),(119,1,0,21,8,8,NULL,NULL),(120,0,1,22,1,1,'2018-06-06 16:34:07',1),(121,0,0,22,2,3,NULL,NULL),(122,0,1,22,3,2,'2018-06-06 16:36:33',1),(123,0,0,22,4,5,NULL,NULL),(124,0,1,22,5,4,'2018-06-06 16:36:55',3),(125,1,0,22,6,7,NULL,NULL),(126,1,0,22,7,6,NULL,NULL),(127,0,1,23,1,1,'2018-06-06 18:57:28',1),(128,1,0,23,2,3,NULL,NULL),(129,1,0,23,3,2,NULL,NULL),(130,0,1,24,1,1,'2018-06-06 18:58:32',1),(131,1,0,24,2,3,NULL,NULL),(132,1,0,24,3,2,NULL,NULL);
 /*!40000 ALTER TABLE `request_action` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -293,15 +297,15 @@ DROP TABLE IF EXISTS `state`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `state` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `state_type_id` int(11) NOT NULL,
-  `process_id` int(11) NOT NULL,
+  `state_type_id` bigint(20) NOT NULL,
+  `process_id` bigint(20) NOT NULL,
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
+  `created_by` bigint(20) NOT NULL,
   `updated_at` datetime NOT NULL,
-  `updated_by` int(11) NOT NULL,
+  `updated_by` bigint(20) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_state_state_type1_idx` (`state_type_id`),
   KEY `fk_state_process1_idx` (`process_id`),
@@ -328,8 +332,8 @@ DROP TABLE IF EXISTS `state_activity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `state_activity` (
-  `state_id` int(11) NOT NULL,
-  `activity_id` int(11) NOT NULL,
+  `state_id` bigint(20) NOT NULL,
+  `activity_id` bigint(20) NOT NULL,
   PRIMARY KEY (`state_id`,`activity_id`),
   KEY `fk_state_activity_activity1_idx` (`activity_id`),
   CONSTRAINT `fk_state_activity_activity1` FOREIGN KEY (`activity_id`) REFERENCES `activity` (`id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
@@ -343,7 +347,7 @@ CREATE TABLE `state_activity` (
 
 LOCK TABLES `state_activity` WRITE;
 /*!40000 ALTER TABLE `state_activity` DISABLE KEYS */;
-INSERT INTO `state_activity` VALUES (4,3);
+INSERT INTO `state_activity` VALUES (4,3),(7,6),(5,7);
 /*!40000 ALTER TABLE `state_activity` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -355,7 +359,7 @@ DROP TABLE IF EXISTS `state_type`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `state_type` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4;
@@ -379,15 +383,15 @@ DROP TABLE IF EXISTS `target`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `target` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `name` varchar(100) NOT NULL,
   `description` text,
-  `target_type_id` int(11) NOT NULL,
-  `user_id` int(11) DEFAULT NULL,
-  `user_group_id` int(11) DEFAULT NULL,
-  `role_id` int(11) DEFAULT NULL,
-  `section_role_id` int(11) DEFAULT NULL,
-  `role_group_id` int(11) DEFAULT NULL,
+  `target_type_id` bigint(20) NOT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
+  `user_group_id` bigint(20) DEFAULT NULL,
+  `role_id` bigint(20) DEFAULT NULL,
+  `section_role_id` bigint(20) DEFAULT NULL,
+  `role_group_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -410,14 +414,15 @@ DROP TABLE IF EXISTS `transition`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transition` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `process_id` int(11) NOT NULL,
-  `current_state_id` int(11) NOT NULL,
-  `next_state_id` int(11) NOT NULL,
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `process_id` bigint(20) NOT NULL,
+  `current_state_id` bigint(20) NOT NULL,
+  `next_state_id` bigint(20) NOT NULL,
   `created_at` datetime NOT NULL,
-  `created_by` int(11) NOT NULL,
+  `created_by` bigint(20) NOT NULL,
   `updated_at` datetime NOT NULL,
-  `updated_by` int(11) NOT NULL,
+  `updated_by` bigint(20) NOT NULL,
+  `description` text,
   PRIMARY KEY (`id`),
   KEY `fk_transition_process1_idx` (`process_id`),
   KEY `fk_transition_state1_idx` (`current_state_id`),
@@ -434,7 +439,7 @@ CREATE TABLE `transition` (
 
 LOCK TABLES `transition` WRITE;
 /*!40000 ALTER TABLE `transition` DISABLE KEYS */;
-INSERT INTO `transition` VALUES (1,1,1,2,'2018-06-05 14:15:15',1,'2018-06-05 14:15:15',1),(2,1,2,1,'2018-06-05 14:16:55',1,'2018-06-05 14:16:55',1),(3,1,2,3,'2018-06-05 14:17:05',1,'2018-06-05 14:17:05',1),(4,1,3,1,'2018-06-05 14:17:25',1,'2018-06-05 14:17:25',1),(5,1,3,4,'2018-06-05 14:17:32',1,'2018-06-05 14:17:32',1),(6,1,4,1,'2018-06-05 14:19:27',1,'2018-06-05 14:19:27',1),(7,1,4,5,'2018-06-05 14:19:31',1,'2018-06-05 14:19:31',1),(8,1,5,6,'2018-06-05 14:22:00',1,'2018-06-05 14:22:00',1),(9,1,6,5,'2018-06-05 14:22:24',1,'2018-06-05 14:22:24',1),(10,1,6,7,'2018-06-05 14:22:28',1,'2018-06-05 14:22:28',1),(11,1,7,5,'2018-06-05 14:23:01',1,'2018-06-05 14:23:01',1),(12,1,7,8,'2018-06-05 14:23:05',1,'2018-06-05 14:23:05',1);
+INSERT INTO `transition` VALUES (1,1,1,2,'2018-06-05 14:15:15',1,'2018-06-05 14:15:15',1,NULL),(2,1,2,1,'2018-06-05 14:16:55',1,'2018-06-05 14:16:55',1,NULL),(3,1,2,3,'2018-06-05 14:17:05',1,'2018-06-05 14:17:05',1,NULL),(4,1,3,1,'2018-06-05 14:17:25',1,'2018-06-05 14:17:25',1,NULL),(5,1,3,4,'2018-06-05 14:17:32',1,'2018-06-05 14:17:32',1,NULL),(6,1,4,1,'2018-06-05 14:19:27',1,'2018-06-05 14:19:27',1,NULL),(7,1,4,5,'2018-06-05 14:19:31',1,'2018-06-05 14:19:31',1,NULL),(8,1,5,6,'2018-06-05 14:22:00',1,'2018-06-05 14:22:00',1,NULL),(9,1,6,5,'2018-06-05 14:22:24',1,'2018-06-05 14:22:24',1,NULL),(10,1,6,7,'2018-06-05 14:22:28',1,'2018-06-05 14:22:28',1,NULL),(11,1,7,5,'2018-06-05 14:23:01',1,'2018-06-05 14:23:01',1,NULL),(12,1,7,8,'2018-06-05 14:23:05',1,'2018-06-05 14:23:05',1,NULL);
 /*!40000 ALTER TABLE `transition` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -446,8 +451,8 @@ DROP TABLE IF EXISTS `transition_action`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transition_action` (
-  `transition_id` int(11) NOT NULL,
-  `action_id` int(11) NOT NULL,
+  `transition_id` bigint(20) NOT NULL,
+  `action_id` bigint(20) NOT NULL,
   PRIMARY KEY (`transition_id`,`action_id`),
   KEY `fk_transition_action_transition1_idx` (`transition_id`),
   KEY `fk_transition_action_action1_idx` (`action_id`),
@@ -474,8 +479,8 @@ DROP TABLE IF EXISTS `transition_activity`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `transition_activity` (
-  `activity_id` int(11) NOT NULL,
-  `transition_id` int(11) NOT NULL,
+  `activity_id` bigint(20) NOT NULL,
+  `transition_id` bigint(20) NOT NULL,
   PRIMARY KEY (`activity_id`,`transition_id`),
   KEY `fk_transition_activity_activity1_idx` (`activity_id`),
   KEY `fk_transition_activity_transition1_idx` (`transition_id`),
@@ -507,4 +512,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-06-05 19:06:23
+-- Dump completed on 2018-06-07 18:55:12
