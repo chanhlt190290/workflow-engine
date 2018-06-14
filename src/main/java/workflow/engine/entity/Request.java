@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package workflow.engine.model;
+package workflow.engine.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -84,14 +84,14 @@ public class Request implements Serializable {
     /**
      * @return the processId
      */
-    public Integer getProcessId() {
+    public Long getProcessId() {
         return processId;
     }
 
     /**
      * @param processId the processId to set
      */
-    public void setProcessId(Integer processId) {
+    public void setProcessId(Long processId) {
         this.processId = processId;
     }
 
@@ -114,23 +114,21 @@ public class Request implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "title")
-    @NotNull
     private String title;
 
     @Column(name = "state_id")
     @JsonIgnore
-    private Integer stateId;
+    private Long stateId;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "state_id", insertable = false, updatable = false)
     private State state;
 
     @Column(name = "process_id")
-    @NotNull
-    private Integer processId;
+    private Long processId;
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -138,8 +136,7 @@ public class Request implements Serializable {
     private Date createdAt;
 
     @Column(name = "created_by")
-    @NotNull
-    private Integer createdBy;
+    private Long createdBy;
 
     @Column(name = "updated_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -147,7 +144,7 @@ public class Request implements Serializable {
     private Date updatedAt;
 
     @Column(name = "updated_by")
-    private Integer updatedBy;
+    private Long updatedBy;
 
     @Transient
     private List<RequestAction> availableActions = new ArrayList<>();
@@ -158,28 +155,28 @@ public class Request implements Serializable {
     /**
      * @return the id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     /**
      * @return the stateId
      */
-    public Integer getStateId() {
+    public Long getStateId() {
         return stateId;
     }
 
     /**
      * @param stateId the stateId to set
      */
-    public void setStateId(Integer stateId) {
+    public void setStateId(Long stateId) {
         this.stateId = stateId;
     }
 
@@ -200,14 +197,14 @@ public class Request implements Serializable {
     /**
      * @return the createdBy
      */
-    public Integer getCreatedBy() {
+    public Long getCreatedBy() {
         return createdBy;
     }
 
     /**
      * @param createdBy the createdBy to set
      */
-    public void setCreatedBy(Integer createdBy) {
+    public void setCreatedBy(Long createdBy) {
         this.createdBy = createdBy;
     }
 
@@ -228,14 +225,14 @@ public class Request implements Serializable {
     /**
      * @return the updatedBy
      */
-    public Integer getUpdatedBy() {
+    public Long getUpdatedBy() {
         return updatedBy;
     }
 
     /**
      * @param updatedBy the updatedBy to set
      */
-    public void setUpdatedBy(Integer updatedBy) {
+    public void setUpdatedBy(Long updatedBy) {
         this.updatedBy = updatedBy;
     }
 

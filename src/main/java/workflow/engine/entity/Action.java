@@ -1,8 +1,7 @@
-package workflow.engine.model;
+package workflow.engine.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -18,11 +17,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -51,64 +46,8 @@ public class Action implements Serializable {
     public Action() {
     }
 
-    public Action(int id) {
+    public Action(Long id) {
         this.id = id;
-    }
-
-    /**
-     * @return the createdAt
-     */
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * @param createdAt the createdAt to set
-     */
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    /**
-     * @return the createdBy
-     */
-    public Integer getCreatedBy() {
-        return createdBy;
-    }
-
-    /**
-     * @param createdBy the createdBy to set
-     */
-    public void setCreatedBy(Integer createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    /**
-     * @return the updatedAt
-     */
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    /**
-     * @param updatedAt the updatedAt to set
-     */
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    /**
-     * @return the updatedBy
-     */
-    public Integer getUpdatedBy() {
-        return updatedBy;
-    }
-
-    /**
-     * @param updatedBy the updatedBy to set
-     */
-    public void setUpdatedBy(Integer updatedBy) {
-        this.updatedBy = updatedBy;
     }
 
     /**
@@ -131,17 +70,16 @@ public class Action implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @JsonIgnore
-    private Integer id;
+    private Long id;
 
     @Column(name = "action_type_id")
     @NotNull
-    @JsonIgnore
     private Integer actionTypeId;
 
     @Column(name = "process_id")
     @NotNull
     @JsonIgnore
-    private Integer processId;
+    private Long processId;
 
     @Column(name = "name")
     @NotNull
@@ -149,28 +87,6 @@ public class Action implements Serializable {
 
     @Column(name = "description")
     private String description;
-
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    @JsonIgnore
-    private Date createdAt;
-
-    @Column(name = "created_by")
-    @NotNull
-    @JsonIgnore
-    private Integer createdBy;
-
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
-    @JsonIgnore
-    private Date updatedAt;
-
-    @Column(name = "updated_by")
-    @NotNull
-    @JsonIgnore
-    private Integer updatedBy;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "transition_action",
@@ -189,11 +105,11 @@ public class Action implements Serializable {
                 @JoinColumn(name = "target_id", referencedColumnName = "id")})
     private Set<Target> targets = new HashSet<>();
 
-    public Integer getId() {
+    public Long getId() {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -230,14 +146,14 @@ public class Action implements Serializable {
     /**
      * @return the processId
      */
-    public Integer getProcessId() {
+    public Long getProcessId() {
         return processId;
     }
 
     /**
      * @param processId the processId to set
      */
-    public void setProcessId(Integer processId) {
+    public void setProcessId(Long processId) {
         this.processId = processId;
     }
 

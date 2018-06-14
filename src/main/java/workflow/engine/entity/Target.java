@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package workflow.engine.model;
+package workflow.engine.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -47,14 +47,14 @@ public class Target implements Serializable {
     /**
      * @return the id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -89,28 +89,28 @@ public class Target implements Serializable {
     /**
      * @return the userId
      */
-    public Integer getUserId() {
+    public Long getUserId() {
         return userId;
     }
 
     /**
      * @param userId the userId to set
      */
-    public void setUserId(Integer userId) {
+    public void setUserId(Long userId) {
         this.userId = userId;
     }
 
     /**
      * @return the userGroupId
      */
-    public Integer getUserGroupId() {
+    public Long getUserGroupId() {
         return userGroupId;
     }
 
     /**
      * @param userGroupId the userGroupId to set
      */
-    public void setUserGroupId(Integer userGroupId) {
+    public void setUserGroupId(Long userGroupId) {
         this.userGroupId = userGroupId;
     }
 
@@ -120,7 +120,7 @@ public class Target implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @JsonIgnore
-    private Integer id;
+    private Long id;
 
     @Column(name = "target_type_id")
     @NotNull
@@ -131,10 +131,10 @@ public class Target implements Serializable {
     private String name;
 
     @Column(name = "user_id")
-    private Integer userId;
+    private Long userId;
 
     @Column(name = "user_group_id")
-    private Integer userGroupId;
+    private Long userGroupId;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "action_target",

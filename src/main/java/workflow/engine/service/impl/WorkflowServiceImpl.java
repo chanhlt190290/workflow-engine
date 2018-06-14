@@ -14,13 +14,13 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import workflow.engine.exception.ResourceNotFoundException;
-import workflow.engine.model.Action;
-import workflow.engine.model.Request;
-import workflow.engine.model.RequestAction;
-import workflow.engine.model.State;
-import workflow.engine.model.Transition;
+import workflow.engine.entity.Action;
+import workflow.engine.entity.Request;
+import workflow.engine.entity.RequestAction;
+import workflow.engine.entity.State;
+import workflow.engine.entity.Transition;
 import workflow.engine.service.WorkflowService;
-import workflow.engine.utils.Constants.StateType;
+import workflow.engine.common.Constants.StateType;
 
 /**
  *
@@ -47,7 +47,7 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
 
     @Override
-    public Request doRequestAction(int requestId, int actionId, int userId) {
+    public Request doRequestAction(Long requestId, Long actionId, Long userId) {
         RequestAction action = em.find(RequestAction.class, actionId);
         if (action == null || action.getIsComplete() || action.getIsActive() == false) {
             throw new ResourceNotFoundException("action", "id", actionId);
@@ -66,7 +66,7 @@ public class WorkflowServiceImpl implements WorkflowService {
 
     }
 
-    private List<Transition> findByState(Integer stateId) {
+    private List<Transition> findByState(Long stateId) {
         TypedQuery<Transition> query = em.createQuery("select t from Transition t where t.currentStateId = :stateId", Transition.class);
         query.setParameter("stateId", stateId);
         List<Transition> transitions = query.getResultList();
@@ -124,7 +124,7 @@ public class WorkflowServiceImpl implements WorkflowService {
         request.getActivities().addAll(transition.getActivities());
     }
 
-    private void completeAction(RequestAction action, int userId) {
+    private void completeAction(RequestAction action, Long userId) {
         action.setCompletedBy(userId);
         action.setIsActive(false);
         action.setIsComplete(true);
@@ -138,26 +138,26 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
 
     @Override
-    public Request getRequest(int requestId) {
+    public Request getRequest(Long requestId) {
         Request request = em.find(Request.class, requestId);
         request.setAvailableActions(getAvailableActions(request.getId()));
         return request;
     }
 
-    private List<RequestAction> getAvailableActions(int requestId) {
+    private List<RequestAction> getAvailableActions(Long requestId) {
         TypedQuery<RequestAction> query = em.createQuery("select ra from RequestAction ra where ra.requestId = :requestId and ra.isActive = true", RequestAction.class);
         query.setParameter("requestId", requestId);
         return query.getResultList();
     }
 
-    private State getStartState(Integer processId) {
+    private State getStartState(Long processId) {
         TypedQuery<State> query = em.createQuery("select s from State s where s.processId = :processId and s.stateTypeId = :stateTypeId", State.class);
         query.setParameter("processId", processId);
         query.setParameter("stateTypeId", StateType.START.getValue());
         return query.getSingleResult();
     }
 
-    private List<RequestAction> getRemainActions(Integer requestId, Integer transitionId) {
+    private List<RequestAction> getRemainActions(Long requestId, Long transitionId) {
         TypedQuery<RequestAction> query = em.createQuery("select ra from RequestAction ra where ra.requestId = :requestId and ra.transitionId = :transitionId and ra.isActive = true", RequestAction.class);
         query.setParameter("requestId", requestId);
         query.setParameter("transitionId", transitionId);
@@ -169,6 +169,23 @@ public class WorkflowServiceImpl implements WorkflowService {
         availableActions.forEach((ra) -> {
             doRequestAction(request.getId(), ra.getId(), request.getCreatedBy());
         });
+    }
+
+    @Override
+    public Request makeRequest(long processId, long userId, String title) {
+        State startState = getStartState(processId);
+        Request request = new Request();
+        request.setTitle(title);
+        request.setProcessId(processId);
+        request.setStateId(startState.getId());
+        request.setCreatedBy(userId);
+        request.setUpdatedBy(userId);
+        em.persist(request);
+        em.flush();
+        loadNewActions(request);
+        applyRequest(request);
+        request.setAvailableActions(getAvailableActions(request.getId()));
+        return request;
     }
 
 }

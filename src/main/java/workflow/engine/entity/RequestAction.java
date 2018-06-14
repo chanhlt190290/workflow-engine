@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package workflow.engine.model;
+package workflow.engine.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
@@ -18,7 +18,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+import static javax.persistence.TemporalType.TIMESTAMP;
 import javax.validation.constraints.NotNull;
+import org.springframework.data.annotation.LastModifiedDate;
 
 /**
  *
@@ -59,14 +61,14 @@ public class RequestAction implements Serializable {
     /**
      * @return the completedBy
      */
-    public Integer getCompletedBy() {
+    public Long getCompletedBy() {
         return completedBy;
     }
 
     /**
      * @param completedBy the completedBy to set
      */
-    public void setCompletedBy(Integer completedBy) {
+    public void setCompletedBy(Long completedBy) {
         this.completedBy = completedBy;
     }
 
@@ -103,24 +105,25 @@ public class RequestAction implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(name = "request_id")
     @NotNull
     @JsonIgnore
-    private Integer requestId;
+    private Long requestId;
 
     @Column(name = "transition_id")
     @NotNull
     @JsonIgnore
-    private Integer transitionId;
+    private Long transitionId;
 
     @Column(name = "completed_by")
     @JsonIgnore
-    private Integer completedBy;
+    private Long completedBy;
 
     @Column(name = "completed_at")
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    @Temporal(TIMESTAMP)
+    @LastModifiedDate
     @JsonIgnore
     private Date completedAt;
 
@@ -142,42 +145,42 @@ public class RequestAction implements Serializable {
     /**
      * @return the id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     /**
      * @return the requestId
      */
-    public Integer getRequestId() {
+    public Long getRequestId() {
         return requestId;
     }
 
     /**
      * @param requestId the requestId to set
      */
-    public void setRequestId(Integer requestId) {
+    public void setRequestId(Long requestId) {
         this.requestId = requestId;
     }
 
     /**
      * @return the transitionId
      */
-    public Integer getTransitionId() {
+    public Long getTransitionId() {
         return transitionId;
     }
 
     /**
      * @param transitionId the transitionId to set
      */
-    public void setTransitionId(Integer transitionId) {
+    public void setTransitionId(Long transitionId) {
         this.transitionId = transitionId;
     }
 

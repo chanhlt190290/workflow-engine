@@ -14,9 +14,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import workflow.engine.model.ApiResponse;
-import workflow.engine.model.Request;
+import workflow.engine.entity.Request;
 import workflow.engine.service.WorkflowService;
 
 /**
@@ -30,23 +31,25 @@ public class WorkflowController {
     @Autowired
     private WorkflowService workflowService;
 
-    @PostMapping(value = "/requests", consumes = "application/json")
-    public ResponseEntity<ApiResponse> makeRequest(@Valid @RequestBody Request request) {
-        request = workflowService.makeRequest(request);
+    @PostMapping(value = "/requests")
+    public ResponseEntity<ApiResponse> makeRequest(@RequestParam("processId") long processId,
+                                                    @RequestParam("userId") long userId,
+                                                    @RequestParam("title") String title) {
+        Request request = workflowService.makeRequest(processId, userId, title);
         ApiResponse apiResponse = new ApiResponse(request);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @PostMapping(value = "/requests/{requestId}/actions/{actionId}/{userId}")
-    public ResponseEntity<ApiResponse> performAction(@PathVariable("requestId") int requestId,
-            @PathVariable("actionId") int actionId, @PathVariable("userId") int userId) {
+    public ResponseEntity<ApiResponse> performAction(@PathVariable("requestId") long requestId,
+            @PathVariable("actionId") long actionId, @PathVariable("userId") long userId) {
         Request request = workflowService.doRequestAction(requestId, actionId, userId);
         ApiResponse apiResponse = new ApiResponse(request);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
     @GetMapping(value = "/requests/{requestId}")
-    public ResponseEntity<ApiResponse> getRequest(@PathVariable("requestId") int requestId) {
+    public ResponseEntity<ApiResponse> getRequest(@PathVariable("requestId") long requestId) {
         Request request = workflowService.getRequest(requestId);
         ApiResponse apiResponse = new ApiResponse(request);
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);

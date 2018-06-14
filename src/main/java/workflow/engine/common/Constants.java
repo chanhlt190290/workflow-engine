@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package workflow.engine.utils;
+package workflow.engine.common;
 
 /**
  *

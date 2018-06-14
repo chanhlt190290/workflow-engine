@@ -3,10 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package workflow.engine.model;
+package workflow.engine.entity;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -21,11 +20,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -56,51 +51,33 @@ public class Transition implements Serializable {
     /**
      * @return the processId
      */
-    public Integer getProcessId() {
+    public Long getProcessId() {
         return processId;
     }
 
     /**
      * @param process the processId to set
      */
-    public void setProcessId(Integer process) {
+    public void setProcessId(Long process) {
         this.processId = process;
     }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Column(name = "process_id")
     @NotNull
-    private Integer processId;
+    private Long processId;
 
     @JoinColumn(name = "current_state_id")
     @NotNull
-    private Integer currentStateId;
+    private Long currentStateId;
 
     @JoinColumn(name = "next_state_id")
     @NotNull
-    private Integer nextStateId;
-
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdAt;
-
-    @Column(name = "created_by")
-    @NotNull
-    private Integer createdBy;
-
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
-    private Date updatedAt;
-
-    @Column(name = "updated_by")
-    @NotNull
-    private Integer updatedBy;
+    private Long nextStateId;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "transition_action",
@@ -121,42 +98,42 @@ public class Transition implements Serializable {
     /**
      * @return the id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
     /**
      * @return the currentStateId
      */
-    public Integer getCurrentStateId() {
+    public Long getCurrentStateId() {
         return currentStateId;
     }
 
     /**
      * @param currentStateId the currentStateId to set
      */
-    public void setCurrentStateId(Integer currentStateId) {
+    public void setCurrentStateId(Long currentStateId) {
         this.currentStateId = currentStateId;
     }
 
     /**
      * @return the nextStateId
      */
-    public Integer getNextStateId() {
+    public Long getNextStateId() {
         return nextStateId;
     }
 
     /**
      * @param nextStateId the nextStateId to set
      */
-    public void setNextStateId(Integer nextStateId) {
+    public void setNextStateId(Long nextStateId) {
         this.nextStateId = nextStateId;
     }
 
@@ -172,62 +149,6 @@ public class Transition implements Serializable {
      */
     public void setActions(Set<Action> actions) {
         this.actions = actions;
-    }
-
-    /**
-     * @return the createdAt
-     */
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * @param createdAt the createdAt to set
-     */
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    /**
-     * @return the createdBy
-     */
-    public Integer getCreatedBy() {
-        return createdBy;
-    }
-
-    /**
-     * @param createdBy the createdBy to set
-     */
-    public void setCreatedBy(Integer createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    /**
-     * @return the updatedAt
-     */
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    /**
-     * @param updatedAt the updatedAt to set
-     */
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    /**
-     * @return the updatedBy
-     */
-    public Integer getUpdatedBy() {
-        return updatedBy;
-    }
-
-    /**
-     * @param updatedBy the updatedBy to set
-     */
-    public void setUpdatedBy(Integer updatedBy) {
-        this.updatedBy = updatedBy;
     }
 
 }

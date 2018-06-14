@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package workflow.engine.model;
+package workflow.engine.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import javax.persistence.CascadeType;
@@ -22,11 +21,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 /**
@@ -57,14 +52,14 @@ public class State implements Serializable {
     /**
      * @return the processId
      */
-    public Integer getProcessId() {
+    public Long getProcessId() {
         return processId;
     }
 
     /**
      * @param process the processId to set
      */
-    public void setProcessId(Integer process) {
+    public void setProcessId(Long process) {
         this.processId = process;
     }
 
@@ -100,7 +95,7 @@ public class State implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     @JsonIgnore
-    private Integer id;
+    private Long id;
 
     @Column(name = "state_type_id")
     @NotNull
@@ -110,7 +105,7 @@ public class State implements Serializable {
     @Column(name = "process_id")
     @NotNull
     @JsonIgnore
-    private Integer processId;
+    private Long processId;
 
     @Column(name = "name")
     @NotNull
@@ -118,28 +113,6 @@ public class State implements Serializable {
 
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
-
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    @JsonIgnore
-    private Date createdAt;
-
-    @Column(name = "created_by")
-    @NotNull
-    @JsonIgnore
-    private Integer createdBy;
-
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
-    @JsonIgnore
-    private Date updatedAt;
-
-    @Column(name = "updated_by")
-    @NotNull
-    @JsonIgnore
-    private Integer updatedBy;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "state_activity",
@@ -151,72 +124,16 @@ public class State implements Serializable {
     private Set<Activity> activities = new HashSet<>();
 
     /**
-     * @return the createdAt
-     */
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    /**
-     * @param createdAt the createdAt to set
-     */
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    /**
-     * @return the createdBy
-     */
-    public Integer getCreatedBy() {
-        return createdBy;
-    }
-
-    /**
-     * @param createdBy the createdBy to set
-     */
-    public void setCreatedBy(Integer createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    /**
-     * @return the updatedAt
-     */
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    /**
-     * @param updatedAt the updatedAt to set
-     */
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    /**
-     * @return the updatedBy
-     */
-    public Integer getUpdatedBy() {
-        return updatedBy;
-    }
-
-    /**
-     * @param updatedBy the updatedBy to set
-     */
-    public void setUpdatedBy(Integer updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
-    /**
      * @return the id
      */
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
     /**
      * @param id the id to set
      */
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

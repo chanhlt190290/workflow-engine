@@ -5,7 +5,7 @@
  */
 package workflow.engine.service;
 
-import workflow.engine.model.Request;
+import workflow.engine.entity.Request;
 
 /**
  *
@@ -15,8 +15,10 @@ public interface WorkflowService {
 
     Request makeRequest(Request request);
 
-    Request doRequestAction(int requestId, int actionId, int userId);
+    Request doRequestAction(Long requestId, Long actionId, Long userId);
 
-    Request getRequest(int requestId);
+    Request getRequest(Long requestId);
+
+    public Request makeRequest(long processId, long userId, String title);
 
 }
