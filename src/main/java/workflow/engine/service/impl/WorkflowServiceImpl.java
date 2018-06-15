@@ -34,20 +34,7 @@ public class WorkflowServiceImpl implements WorkflowService {
     private EntityManager em;
 
     @Override
-    public Request makeRequest(Request request) {
-        State startState = getStartState(request.getProcessId());
-        request.setStateId(startState.getId());
-        request.setUpdatedBy(request.getCreatedBy());
-        em.persist(request);
-        em.flush();
-        loadNewActions(request);
-        applyRequest(request);
-        request.setAvailableActions(getAvailableActions(request.getId()));
-        return request;
-    }
-
-    @Override
-    public Request doRequestAction(Long requestId, Long actionId, Long userId) {
+    public Request doRequestAction(long requestId, long actionId, long userId) {
         RequestAction action = em.find(RequestAction.class, actionId);
         if (action == null || action.getIsComplete() || action.getIsActive() == false) {
             throw new ResourceNotFoundException("action", "id", actionId);
@@ -171,19 +158,23 @@ public class WorkflowServiceImpl implements WorkflowService {
         });
     }
 
+    
     @Override
-    public Request makeRequest(long processId, long userId, String title) {
+    public Request makeRequest(long processId, long userId, String title, boolean doApply) {
         State startState = getStartState(processId);
         Request request = new Request();
         request.setTitle(title);
         request.setProcessId(processId);
         request.setStateId(startState.getId());
+        request.setState(startState);
         request.setCreatedBy(userId);
         request.setUpdatedBy(userId);
         em.persist(request);
         em.flush();
         loadNewActions(request);
-        applyRequest(request);
+        if (doApply) {
+            applyRequest(request);
+        }
         request.setAvailableActions(getAvailableActions(request.getId()));
         return request;
     }
